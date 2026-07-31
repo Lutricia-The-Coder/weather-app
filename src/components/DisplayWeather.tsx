@@ -31,13 +31,37 @@ export const DisplayWeather = () => {
 
     const [weatherData , setWeatherData] = React.useState<WeatherDataProps | null >(null)
 
-
+const [isLoading, setIsLoading] = React.useState(false)
+const [searchCity,setSearchCity] =React.useState("")
     const fetchCurrentWeather = async (lat:number , lon:number) => {
 const url = `${api_Endpoint}weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`
 const response = await axios.get(url);
 return response.data;
     };
 
+    const fetchWeatherData = async(city:string) =>{
+        try{
+            const url = `${api_Endpoint}weather?q=${city}&appid=${api_key}&units=metric`
+            const searchResponse = await axios.get(url);
+            const currentWeatherData:WeatherDataProps = searchResponse.data;
+            return{currentWeatherData}
+        }catch(error){
+            console.error("No data found")
+            throw error
+        }
+    }
+    const handleSearch = async () =>{
+        if(searchCity.trim() ===""){
+            return;
+        }
+
+        try{
+            const {currentWeatherData} = await fetchWeatherData(searchCity)
+            setWeatherData(currentWeatherData)
+        }catch(error){
+            console.error("No results found")
+        }
+    }
 
     const iconChanger = (weather:string) =>{
         let iconElement: React.ReactNode;
@@ -80,6 +104,7 @@ navigator.geolocation.getCurrentPosition((position) => {
     Promise.all([fetchCurrentWeather(latitude , longitude)]).then(
 ([currentWeather]) => {
 setWeatherData(currentWeather)
+setIsLoading(true)
 }
     )
 })
@@ -87,16 +112,19 @@ setWeatherData(currentWeather)
     })
   return (
     <MainWrapper>
+
         <div className="container">
             <div className="searchArea">
-                <input type="text" placeholder="enter a city" />
+                <input type="text" placeholder="enter a city"
+                value={searchCity}
+                onChange={(e) => setSearchCity(e.target.value)}/>
             
             <div className="searchCircle">
-             <AiOutlineSearch  className="searchIcon"/>
+             <AiOutlineSearch  className="searchIcon" onClick={handleSearch}/>
             </div>
         </div>
         {
-            weatherData&& (
+            weatherData&& isLoading ?(
             <>
           <div className="weatherArea">
             <h1>{weatherData.name}</h1>
@@ -128,8 +156,13 @@ setWeatherData(currentWeather)
      </>
 
 
+            ):(
+<div className="loading">
+    <RiLoaderFill className="loading-icon" />
+    <p>Loading</p>
+</div>
             )
-        }
+          }
         
         </div>
     </MainWrapper>
