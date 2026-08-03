@@ -99,8 +99,8 @@ export const DisplayWeather = () => {
         dt: item.dt,
         temp: {
           day: item.main.temp,
-          min: item.main.temp,
-          max: item.main.temp,
+          min: Math.round(item.main.temp),
+          max: Math.round(item.main.temp),
         },
         weather: item.weather,
       }));

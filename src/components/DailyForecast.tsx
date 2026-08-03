@@ -17,7 +17,7 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ dailyData = [], un
 
   return (
     <div className="dailyForecast">
-      <h2>7‑Day Forecast</h2>
+      <h2>5‑Day Forecast</h2>
       <div className="forecastGrid">
         {dailyData.slice(0, 7).map((day) => (
           <div
