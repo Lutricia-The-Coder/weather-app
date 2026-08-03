@@ -5,6 +5,8 @@ import { SearchBar } from "./SearchBar";
 import { WeatherInfo } from "./WeatherInfo";
 import { BottomInfo } from "./BottomInfo";
 import { Loading } from "./Loading";
+import { DailyForecast } from "./DailyForecast";
+import { HourlyForecast } from "./HourlyForecast";
 
 interface WeatherDataProps {
   name: string;
@@ -21,9 +23,16 @@ export const DisplayWeather = () => {
   const [weatherData, setWeatherData] = React.useState<WeatherDataProps | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
   const [searchCity, setSearchCity] = React.useState("");
+    const [forecastData, setForecastData] = React.useState<any | null>(null);
 
   const fetchCurrentWeather = async (lat: number, lon: number) => {
-    const url = `${api_Endpoint}weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
+    const url = `${api_Endpoint}onecall?lat=${lat}&lon=${lon}&exclude=minutely,alerts&appid=${api_key}&units=metric`;
+    const response = await axios.get(url);
+    return response.data;
+  };
+    // fetch forecast (hourly + daily)
+  const fetchForecast = async (lat: number, lon: number) => {
+    const url = `${api_Endpoint}onecall?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
     const response = await axios.get(url);
     return response.data;
   };
@@ -35,10 +44,12 @@ export const DisplayWeather = () => {
   };
 
   const handleSearch = async () => {
-    if (searchCity.trim() === "") return;
-    try {
+    if (!searchCity.trim()) return;
+        try {
       const currentWeatherData = await fetchWeatherData(searchCity);
       setWeatherData(currentWeatherData);
+       const forecast = await fetchForecast(currentWeatherData.coord.lat, currentWeatherData.coord.lon);
+      setForecastData(forecast);
       setIsLoading(true);
     } catch {
       console.error("No results found");
@@ -67,7 +78,18 @@ export const DisplayWeather = () => {
               temp={weatherData.main.temp}
               weather={weatherData.weather[0].main}
             />
-            <BottomInfo humidity={weatherData.main.humidity} windSpeed={weatherData.wind.speed} />
+            <BottomInfo humidity={weatherData.main.humidity}
+             windSpeed={weatherData.wind.speed} />
+
+            {/* HourlyForecast & DailyForecast components go here */}
+           {forecastData && (
+  <>
+    <HourlyForecast hourlyData={forecastData.hourly} />
+    <DailyForecast dailyData={forecastData.daily} />
+  </>
+)}
+
+
           </>
         ) : (
           <Loading />
