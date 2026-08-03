@@ -82,7 +82,7 @@ export const DisplayWeather = () => {
 
     return forecastData.list.slice(0, 8).map((item) => ({
       dt: item.dt,
-      temp: item.main.temp,
+      temp: Math.round(item.main.temp),
       weather: item.weather,
     }));
   };
