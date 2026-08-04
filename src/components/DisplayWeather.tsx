@@ -53,6 +53,7 @@ export const DisplayWeather = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [searchCity, setSearchCity] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
+<<<<<<< HEAD
 const [theme, setTheme] = React.useState<"light" | "dark">("light");
 const [unit, setUnit] = React.useState<"C" | "F">("C");
 
@@ -62,14 +63,22 @@ const [unit, setUnit] = React.useState<"C" | "F">("C");
       prevTheme === "light" ? "dark" : "light"
     );
   };
+=======
+
+>>>>>>> 00537363583975e05b69489b12770ae06e1dfc6e
 
   // Current weather by city
   const fetchWeatherData = async (city: string) => {
     const url = `${api_Endpoint}weather?q=${city}&appid=${api_key}&units=metric`;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 00537363583975e05b69489b12770ae06e1dfc6e
     const response = await axios.get(url);
     return response.data;
   };
 
+<<<<<<< HEAD
 const fetchWeatherByCoordinates = async (
   lat: number,
   lon: number
@@ -84,6 +93,15 @@ const fetchWeatherByCoordinates = async (
   const fetchForecast = async (lat: number, lon: number) => {
     const url = `${api_Endpoint}forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
     const response = await axios.get(url);
+=======
+
+  // 5 day / 3 hour forecast
+  const fetchForecast = async (lat: number, lon: number) => {
+    const url = `${api_Endpoint}forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
+
+    const response = await axios.get(url);
+
+>>>>>>> 00537363583975e05b69489b12770ae06e1dfc6e
     console.log("Forecast data:", response.data);
 
     return response.data;
@@ -103,6 +121,7 @@ const fetchWeatherByCoordinates = async (
 
 
   // Convert API data for DailyForecast component
+<<<<<<< HEAD
 const getDailyData = () => {
   if (!forecastData?.list) return [];
 
@@ -164,6 +183,24 @@ const getDailyData = () => {
       };
     });
 };
+=======
+  const getDailyData = () => {
+    if (!forecastData?.list) return [];
+
+    return forecastData.list
+      .filter((_, index) => index % 8 === 0)
+      .slice(0, 5)
+      .map((item) => ({
+        dt: item.dt,
+        temp: {
+          day: item.main.temp,
+          min: Math.round(item.main.temp),
+          max: Math.round(item.main.temp),
+        },
+        weather: item.weather,
+      }));
+  };
+>>>>>>> 00537363583975e05b69489b12770ae06e1dfc6e
 
 
   const handleSearch = async () => {
@@ -201,6 +238,7 @@ const getDailyData = () => {
   React.useEffect(() => {
     setIsLoading(true);
 
+<<<<<<< HEAD
     if (!navigator.geolocation) {
   setError("Location is not supported by your browser.");
   return;
@@ -238,6 +276,35 @@ navigator.geolocation.getCurrentPosition(
       setIsLoading(false);
     }
   },
+=======
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          const { latitude, longitude } = position.coords;
+
+
+          const currentWeather = await fetchWeatherData("Polokwane");
+
+          setWeatherData(currentWeather);
+
+
+          const forecast = await fetchForecast(
+            latitude,
+            longitude
+          );
+
+          setForecastData(forecast);
+
+
+        } catch (err) {
+          console.error(err);
+          setError("Unable to fetch local weather data.");
+
+        } finally {
+          setIsLoading(false);
+        }
+      },
+>>>>>>> 00537363583975e05b69489b12770ae06e1dfc6e
 
       async () => {
         try {
@@ -265,6 +332,7 @@ navigator.geolocation.getCurrentPosition(
 
 
 
+<<<<<<< HEAD
 return (
   <div className={`MainWrapper ${theme}`}>
     <button
@@ -274,6 +342,9 @@ return (
       {theme === "light" ? "🌙 Dark" : "☀️ Light"}
     </button>
 
+=======
+  return (
+>>>>>>> 00537363583975e05b69489b12770ae06e1dfc6e
     <div className="container">
 
       <SearchBar
@@ -335,6 +406,9 @@ return (
       )}
 
     </div>
+<<<<<<< HEAD
     </div>
+=======
+>>>>>>> 00537363583975e05b69489b12770ae06e1dfc6e
   );
 };
