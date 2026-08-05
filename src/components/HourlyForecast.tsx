@@ -17,7 +17,7 @@ export const HourlyForecast: React.FC<HourlyForecastProps> = ({ hourlyData = [] 
 
   return (
     <div className="hourlyForecast">
-      <h2>8 - Hour Forecast</h2>
+      <h2>8- Hour Forecast</h2>
       <div className="forecastScroll">
         {hourlyData.slice(0, 24).map((hour) => (
           <div
