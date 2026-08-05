@@ -1,6 +1,4 @@
-/* =========================
-   LIGHT THEME
-========================= */
+/* LIGHT THEME */
 
 .MainWrapper.light {
   --background: linear-gradient(to right, #c7c7eb, #ccf2dd);
@@ -11,9 +9,7 @@
   --shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* =========================
-   DARK THEME
-========================= */
+/*DARK THEME */
 
 .MainWrapper.dark {
   --background: linear-gradient(to right, #141e30, #243b55);
@@ -24,9 +20,7 @@
   --shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
 }
 
-/* =========================
-   MAIN WRAPPER
-========================= */
+/* MAIN WRAPPER*/
 
 .MainWrapper {
   min-height: 100vh;
@@ -34,11 +28,10 @@
   position: relative;
 }
 
-/* =========================
-   CONTAINER
-========================= */
+/* container*/
 
 .MainWrapper .container {
+  margin-top: 280px;
   display: flex;
   background: var(--card-background);
   border-radius: 12px;
@@ -56,9 +49,7 @@
   width: min(700px, 100%);
 }
 
-/* =========================
-   SEARCH
-========================= */
+/*  SEARCh */
 
 .searchArea {
   margin-top: 20px;
