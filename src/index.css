@@ -153,9 +153,7 @@
   margin-right: 10px;
 }
 
-/* =========================
-   LOADING
-========================= */
+/*LOADING */
 
 .loading {
   height: 400px;
@@ -185,9 +183,7 @@
   }
 }
 
-/* =========================
-   DAILY FORECAST
-========================= */
+/* DAILY FORECAST */
 
 .dailyForecast {
   display: flex;
@@ -224,9 +220,8 @@
   margin: 12px 0;
 }
 
-/* =========================
-   HOURLY FORECAST
-========================= */
+/* 
+   HOURLY FORECAST */
 
 .hourlyForecast {
   display: flex;
@@ -262,9 +257,8 @@
   font-size: 2rem;
 }
 
-/* =========================
-   THEME BUTTON
-========================= */
+/*
+   THEME BUTTON */
 
 .themeButton {
   position: absolute;
