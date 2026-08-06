@@ -7,6 +7,8 @@ import { Loading } from "./Loading";
 import { DailyForecast } from "./DailyForecast";
 import { HourlyForecast } from "./HourlyForecast";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import { WeatherAlerts , WeatherAlert} from "./WeatherAlerts";
+import { useNotification } from "../hooks/useNotification";
 
 interface WeatherDataProps {
   name: string;
@@ -54,7 +56,8 @@ export const DisplayWeather = () => {
   ("savedCities", []);
 const [theme, setTheme] =useLocalStorage<"light" | "dark">("theme", "light");
 const [unit, setUnit] = useLocalStorage<"C" | "F">("unit", "C");
-
+const [alerts,setAlerts] =React.useState<WeatherAlert[]>([]);
+useNotification(alerts);
 
 // Toogle theme
   const toggleTheme = () => {
@@ -90,6 +93,28 @@ const fetchWeatherByCoordinates = async (
     const response = await axios.get(url);
     return response.data;
   };
+
+  //catch alerts
+const fetchWeatherAlerts = async (
+  lat:number,
+  lon:number
+):Promise<WeatherAlert[]> => {
+
+  try {
+
+const url =
+`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;    const response = await axios.get(url);
+    return response.data.alerts || [];
+
+  } catch(error){
+    console.log(
+      "No weather alerts available"
+    );
+
+    return [];
+  }
+
+};
 
 //save cities 
 const saveCity = () => {
@@ -143,13 +168,22 @@ const loadCity = async (city: string) => {
       const currentWeatherData = await fetchWeatherData(searchCity);
 
       setWeatherData(currentWeatherData);
+      const lat = currentWeatherData.coord.lat;
+      const lon = currentWeatherData.coord.lon;
 
       const forecast = await fetchForecast(
-        currentWeatherData.coord.lat,
-        currentWeatherData.coord.lon
+      lat,
+      lon
       );
 
       setForecastData(forecast);
+      const weatherAlerts =
+await fetchWeatherAlerts(
+ lat,
+ lon
+);
+
+setAlerts(weatherAlerts);
 
     } catch {
       setError("City not found.");
@@ -218,7 +252,12 @@ const getDailyData = () => {
 };
 
 React.useEffect(() => {
-
+  //get permision for notifications
+  if ("Notification" in window) {
+  if (Notification.permission !== "granted") {
+    Notification.requestPermission();
+  }
+}
   setIsLoading(true);
 
   if (!navigator.geolocation) {
@@ -249,6 +288,12 @@ React.useEffect(() => {
             longitude
           );
         setForecastData(forecast);
+        const weatherAlerts =
+await fetchWeatherAlerts(
+ latitude,
+ longitude
+);
+setAlerts(weatherAlerts);
       } catch {
         setError(
           "Unable to fetch local weather data."
@@ -272,6 +317,13 @@ React.useEffect(() => {
             data.coord.lon
           );
         setForecastData(forecast);
+        const weatherAlerts =
+await fetchWeatherAlerts(
+  data.coord.lat,
+  data.coord.lon
+);
+
+setAlerts(weatherAlerts);
       } catch {
         setError(
           "Unable to fetch default city weather data."
@@ -328,7 +380,9 @@ return (
             weather={weatherData.weather[0].main}
             unit={unit}
           />
-
+<WeatherAlerts
+ alerts={alerts}
+/>
 
           <BottomInfo
             humidity={weatherData.main.humidity}
