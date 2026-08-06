@@ -7,7 +7,7 @@ import { Loading } from "./Loading";
 import { DailyForecast } from "./DailyForecast";
 import { HourlyForecast } from "./HourlyForecast";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { WeatherAlerts, type WeatherAlert } from "./WeatherAlerts";
+import { WeatherAlerts , type WeatherAlert}  from "./WeatherAlerts";
 import { useNotification } from "../hooks/useNotification";
 
 interface WeatherDataProps {
