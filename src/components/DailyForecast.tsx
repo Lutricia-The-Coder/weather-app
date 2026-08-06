@@ -7,10 +7,11 @@ interface DailyForecastProps {
     temp: { day: number; min: number; max: number };
     weather: { main: string }[];
   }[];
-  unit?: string; // default "°C"
+  unit: "C" | "F";
+  convertTemp: (temp: number) => number;
 }
 
-export const DailyForecast: React.FC<DailyForecastProps> = ({ dailyData = [], unit = "°C" }) => {
+export const DailyForecast: React.FC<DailyForecastProps> = ({ dailyData = [], unit , convertTemp }) => {
   const formatDay = (timestamp: number) => {
     return new Date(timestamp * 1000).toLocaleDateString([], { weekday: "short" });
   };
@@ -19,16 +20,22 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ dailyData = [], un
     <div className="dailyForecast">
       <h2>5 - Day Forecast</h2>
       <div className="forecastGrid">
-        {dailyData.slice(0, 7).map((day) => (
+        {dailyData.slice(0,5).map((day) => (
           <div
             key={day.dt}
             className="forecastDay"
-            aria-label={`${formatDay(day.dt)}: ${day.weather[0].main}, Day ${day.temp.day}${unit}, Min ${day.temp.min}${unit}, Max ${day.temp.max}${unit}`}
+            aria-label={`${formatDay(day.dt)}:
+            ${day.weather[0].main},
+            Day ${convertTemp(day.temp.day)}°${unit},
+            Min ${convertTemp(day.temp.min)}°${unit},
+            Max ${convertTemp(day.temp.max)}°${unit}`}
           >
             <p>{formatDay(day.dt)}</p>
-            <div className="forecastIcon">{iconChanger(day.weather[0].main)}</div>
-            <p>Day: {Math.round(day.temp.day)}{unit}</p>
-            <p>Min: {day.temp.min}{unit} / Max: {day.temp.max}{unit}</p>
+            <div className="forecastIcon">
+              {iconChanger(day.weather[0].main)}</div>
+            <p>Day: {convertTemp(day.temp.day)}°{unit}</p>
+            <p>Min: {convertTemp(day.temp.min)}°{unit}{"/"}
+              Max: {convertTemp(day.temp.max)}°{unit}</p>
           </div>
         ))}
       </div>

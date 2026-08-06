@@ -1,4 +1,4 @@
-import React from "react";
+
 import { iconChanger } from "./IconChanger";
 
 interface HourlyForecastProps {
@@ -7,9 +7,11 @@ interface HourlyForecastProps {
     temp: number;
     weather: { main: string }[];
   }[];
+  unit: "C" | "F";
+  convertTemp: (temp: number) => number;
 }
 
-export const HourlyForecast: React.FC<HourlyForecastProps> = ({ hourlyData = [] }) => {
+export const HourlyForecast = ({ hourlyData, unit, convertTemp }: HourlyForecastProps) => {
   const formatHour = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleTimeString([], { hour: "numeric", hour12: true });
@@ -19,15 +21,20 @@ export const HourlyForecast: React.FC<HourlyForecastProps> = ({ hourlyData = [] 
     <div className="hourlyForecast">
       <h2>8 - Hour Forecast</h2>
       <div className="forecastScroll">
-        {hourlyData.slice(0, 24).map((hour) => (
+        {hourlyData.slice(0,8).map((hour) => (
           <div
             key={hour.dt}
             className="forecastHour"
-            aria-label={`At ${formatHour(hour.dt)}, ${hour.weather[0].main}, ${hour.temp}°C`}
+            aria-label={
+              `At ${formatHour(hour.dt)},
+              ${hour.weather[0].main},
+              ${convertTemp(hour.temp)}°${unit}`
+            }
           >
             <p>{formatHour(hour.dt)}</p>
-            <div className="forecastIcon">{iconChanger(hour.weather[0].main)}</div>
-            <p>{hour.temp}°C</p>
+            <div className="forecastIcon">
+              {iconChanger(hour.weather[0].main)}</div>
+            <p>{convertTemp(hour.temp)}°{unit}</p>
           </div>
         ))}
       </div>

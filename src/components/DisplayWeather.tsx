@@ -6,6 +6,7 @@ import { BottomInfo } from "./BottomInfo";
 import { Loading } from "./Loading";
 import { DailyForecast } from "./DailyForecast";
 import { HourlyForecast } from "./HourlyForecast";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 interface WeatherDataProps {
   name: string;
@@ -49,25 +50,11 @@ export const DisplayWeather = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [searchCity, setSearchCity] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
-  const[savedCities, setSavedCities] = React.useState<string[]>(() =>{
-    const saved = localStorage.getItem("savedCities");
-    return saved ? JSON.parse(saved) : [];
-  });
-const [theme, setTheme] = React.useState<"light" | "dark">(() => {
-  return localStorage.getItem("theme") === "dark" ? "dark" : "light";
-});
-const [unit, setUnit] = React.useState<"C" | "F">(() => {
-  return localStorage.getItem("unit") === "F" ? "F" : "C";
-});
-//persisst them to local storage
-React.useEffect(() => {
-  localStorage.setItem("theme", theme);
-}, [theme]);
+  const[savedCities, setSavedCities] = useLocalStorage<string[]>
+  ("savedCities", []);
+const [theme, setTheme] =useLocalStorage<"light" | "dark">("theme", "light");
+const [unit, setUnit] = useLocalStorage<"C" | "F">("unit", "C");
 
-//persist theme to local storage
-React.useEffect(() => {
-  localStorage.setItem("unit", unit);
-}, [unit]);
 
 // Toogle theme
   const toggleTheme = () => {
@@ -106,20 +93,25 @@ const fetchWeatherByCoordinates = async (
 
 //save cities 
 const saveCity = () => {
-  if(!weatherData) return;
 
-  if (!savedCities.includes(weatherData.name)) {
-    const updatedCities = [...savedCities, weatherData.name];
-    setSavedCities(updatedCities);
-    localStorage.setItem("savedCities", JSON.stringify(updatedCities));
+  if (!weatherData) return;
+  const exists =
+    savedCities.some(
+      city =>
+        city.toLowerCase() ===
+        weatherData.name.toLowerCase()
+    );
+  if (!exists) {
+
+    setSavedCities([
+      ...savedCities,
+      weatherData.name
+    ]);
   }
-};  
+}; 
 //remove a city
 const removeCity = (city: string) => {
-  const updatedCities = savedCities.filter(item => item !== city
-  );
-  setSavedCities(updatedCities);
-  localStorage.setItem("savedCities", JSON.stringify(updatedCities));
+  setSavedCities(savedCities.filter(item => item !== city));
 }
 
 const loadCity = async (city: string) => {
@@ -209,10 +201,6 @@ const getDailyData = () => {
         item => item.main.temp
       );
 
-      // closest forecast to midday
-      const dayTemp =
-        dayForecasts.map(item => item.main.temp);
-
       return {
         dt: dayForecasts[0].dt,
 
@@ -229,54 +217,71 @@ const getDailyData = () => {
     });
 };
 
-  React.useEffect(() => {
-    setIsLoading(true);
+React.useEffect(() => {
 
-navigator.geolocation.getCurrentPosition(
-  async (position) => {
-    try {
-      const { latitude, longitude } = position.coords;
+  setIsLoading(true);
 
+  if (!navigator.geolocation) {
+    setError(
+      "Geolocation is not supported by your browser."
+    );
+    setIsLoading(false);
+    return;
+  }
 
-      const currentWeather =
-        await fetchWeatherByCoordinates(
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      try {
+        const {
           latitude,
           longitude
+        } = position.coords;
+
+        const currentWeather =
+          await fetchWeatherByCoordinates(
+            latitude,
+            longitude
+          );
+        setWeatherData(currentWeather);
+        const forecast =
+          await fetchForecast(
+            latitude,
+            longitude
+          );
+        setForecastData(forecast);
+      } catch {
+        setError(
+          "Unable to fetch local weather data."
         );
+      } finally {
+        setIsLoading(false);
+      }
+    },
 
-      setWeatherData(currentWeather);
-      const forecast =
-        await fetchForecast(
-          latitude,
-          longitude
-        );
+    async () => {
 
-      setForecastData(forecast);
-
-    } catch {
-      setError("Unable to fetch local weather data.");
-
-    } finally {
-      setIsLoading(false);
-    }
-  },
-
-      async () => {
-      
-          const data = await fetchWeatherData("Polokwane");
-
-          setWeatherData(data);
-
-          const forecast = await fetchForecast(
+      try {
+        const data =
+          await fetchWeatherData(
+            "Polokwane"
+          );
+        setWeatherData(data);
+        const forecast =
+          await fetchForecast(
             data.coord.lat,
             data.coord.lon
           );
-
-          setForecastData(forecast);
-setIsLoading(false);
+        setForecastData(forecast);
+      } catch {
+        setError(
+          "Unable to fetch default city weather data."
+        );
+      } finally {
+        setIsLoading(false);
       }
-    );
-  }, []);
+    }
+  );
+}, []);
 
 return (
   <div className={`MainWrapper ${theme}`}>
@@ -333,21 +338,17 @@ return (
               <HourlyForecast
                 hourlyData={getHourlyData()}
                 unit={unit}
+                convertTemp={convertTemp}
               />
-
-
               <DailyForecast
                 dailyData={getDailyData()}
                 unit={unit}
+                convertTemp={convertTemp}
               />
-
             </>
-
         }
 
         </div>
         </div>
   );
 }
-
-    
