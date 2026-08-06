@@ -39,8 +39,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({ searchCity, setSearchCity,
 
   <h3>Saved Locations</h3>
 
-           {savedCities.length === 0 ? 
-                  <p>No saved locations</p> :
+  {savedCities.length === 0 ? 
+    <p>No saved locations</p> :
 
 savedCities.map((city) => (
   <div key={city} className="cityItem">
