@@ -8,7 +8,7 @@ interface BottomInfoProps {
 }
 
 export const BottomInfo: React.FC<BottomInfoProps> = ({ humidity, windSpeed }) => (
-  <div className="bottomInfoArea">
+  <div className="bottomInfo">
     <div className="humidityLevel">
       <WiHumidity className="windIcon" />
       <div className="humidInfo">

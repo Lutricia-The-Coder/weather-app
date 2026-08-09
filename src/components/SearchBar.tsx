@@ -6,12 +6,9 @@ interface SearchBarProps {
   setSearchCity: (city: string) => void;
   handleSearch: () => void;
       saveCity(): void;
-      savedCities: string[];
-    loadCity: (city: string) => void;
-    removeCity: (city: string) => void;
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({ searchCity, setSearchCity, handleSearch , saveCity, savedCities, loadCity, removeCity}) => {
+export const SearchBar: React.FC<SearchBarProps> = ({ searchCity, setSearchCity, handleSearch , saveCity}) => {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     handleSearch();
@@ -19,7 +16,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ searchCity, setSearchCity,
   };
 
   return (
-    <form className="searchArea" onSubmit={onSubmit}>
+    <form className="searchContainer" onSubmit={onSubmit}>
       <input 
         type="text" 
         placeholder="Enter a city"
@@ -32,38 +29,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({ searchCity, setSearchCity,
       </button>
 
       <button type="button" className="saveButton" onClick={saveCity}>
-        Save City
+        Save 
       </button>
 
-      <div className="savedCities">
 
-  <h3>Saved Locations</h3>
-
-  {savedCities.length === 0 ? 
-    <p>No saved locations</p> :
-
-savedCities.map((city) => (
-  <div key={city} className="cityItem">
-    
-      <button type="button" 
-        onClick={() => loadCity(city)}
-      >
-        {city}
-      </button>
-
-      <button
-        className="deleteButton"
-        aria-label={`Delete ${city}`}
-        onClick={() => removeCity(city)}
-      >
-        ✖
-      </button>
-
-    </div>
-
-  ))}
-
-</div>
     </form>
   );
 };

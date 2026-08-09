@@ -25,10 +25,16 @@ export function useLocalStorage<T>(
           ? valueOrFunction(prev)
           : valueOrFunction;
 
-      localStorage.setItem(
-        key,
-        JSON.stringify(newValue)
-      );
+      try {
+        localStorage.setItem(
+          key,
+          JSON.stringify(newValue)
+        );
+      } catch {
+        console.log(
+          "Unable to save data to localStorage"
+        );
+      }
 
       return newValue;
     });

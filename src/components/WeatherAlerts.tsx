@@ -1,3 +1,4 @@
+
 import React from "react";
 
 export interface WeatherAlert {
@@ -8,62 +9,67 @@ export interface WeatherAlert {
   description: string;
 }
 
-interface WeatherAlertProps {
+interface WeatherAlertsProps {
   alerts: WeatherAlert[];
 }
 
-export const WeatherAlerts: React.FC<WeatherAlertProps> = ({
-  alerts = []
+export const WeatherAlerts: React.FC<WeatherAlertsProps> = ({
+  alerts = [],
 }) => {
+  const [showAlerts, setShowAlerts] = React.useState(true);
 
   const formatTime = (timestamp: number) => {
-    return new Date(timestamp * 1000)
-      .toLocaleString();
+    return new Date(timestamp * 1000).toLocaleString();
   };
 
   if (!alerts.length) {
     return null;
   }
+
   return (
-    <div className="weatherAlert">
+    <section className="weatherAlert">
+      <div className="sectionHeader">
+        <h2>Weather Alerts</h2>
 
-      <h2>
-        ⚠️ Severe Weather Alerts
-      </h2>
-
-
-      {alerts.map((alert,index)=>(
-
-        <div 
-          key={index}
-          className="alertCard"
+        <button
+          type="button"
+          onClick={() => setShowAlerts((prev) => !prev)}
+          aria-expanded={showAlerts}
         >
-          <h3>
-            {alert.event}
-          </h3>
-          <p>
-            Issued by:
-            {" "}
-            {alert.sender_name}
-          </p>
-          <p>
-            Starts:
-            {" "}
-            {formatTime(alert.start)}
-          </p>
-          <p>
-            Ends:
-            {" "}
-            {formatTime(alert.end)}
-          </p>
-          <p>
-            {alert.description}
-          </p>
+          {showAlerts ? "Hide" : "Show"}
+        </button>
+      </div>
 
+      {showAlerts && (
+        <div className="alertList">
+          {alerts.map((alert, index) => (
+            <div
+              key={`${alert.event}-${alert.start}-${index}`}
+              className="alertCard"
+              role="alert"
+            >
+              <h3>{alert.event}</h3>
+
+              <p>
+                <strong>Issued by:</strong>{" "}
+                {alert.sender_name}
+              </p>
+
+              <p>
+                <strong>Starts:</strong>{" "}
+                {formatTime(alert.start)}
+              </p>
+
+              <p>
+                <strong>Ends:</strong>{" "}
+                {formatTime(alert.end)}
+              </p>
+
+              <p>{alert.description}</p>
+            </div>
+          ))}
         </div>
-
-      ))}
-
-    </div>
+      )}
+    </section>
   );
 };

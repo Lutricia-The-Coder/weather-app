@@ -2,29 +2,37 @@ import React from "react";
 import axios from "axios";
 import { SearchBar } from "./SearchBar";
 import { WeatherInfo } from "./WeatherInfo";
-import { BottomInfo } from "./BottomInfo";
 import { Loading } from "./Loading";
 import { DailyForecast } from "./DailyForecast";
 import { HourlyForecast } from "./HourlyForecast";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import { WeatherAlerts , type WeatherAlert}  from "./WeatherAlerts";
+import { WeatherAlerts, type WeatherAlert } from "./WeatherAlerts";
 import { useNotification } from "../hooks/useNotification";
+import { Sidebar } from "./Sidebar";
+import { WeatherHighlights } from "./WeatherHighlights";
 
 interface WeatherDataProps {
   name: string;
   main: {
     temp: number;
+    feels_like: number;
     humidity: number;
+    pressure: number;
   };
   sys: {
     country: string;
+    sunrise: number;
+    sunset: number;
   };
   weather: {
     main: string;
+    description: string;
   }[];
   wind: {
     speed: number;
   };
+  visibility: number;
+  timezone: number;
   coord: {
     lat: number;
     lon: number;
@@ -40,369 +48,515 @@ interface ForecastDataProps {
     weather: {
       main: string;
     }[];
+    pop: number;
   }[];
 }
 
 export const DisplayWeather = () => {
-  const api_key = import.meta.env.VITE_WEATHER_API_KEY as string;
-  const api_Endpoint = "https://api.openweathermap.org/data/2.5/";
+  const apiKey = import.meta.env.VITE_WEATHER_API_KEY as string | undefined;
+const apiEndpoint = "https://api.openweathermap.org/data/2.5/";
 
-  const [weatherData, setWeatherData] =React.useState<WeatherDataProps | null>(null);
- const [forecastData, setForecastData] = React.useState<ForecastDataProps | null>(null);
+  const [weatherData, setWeatherData] = React.useState<WeatherDataProps | null>(null);
+  const [forecastData, setForecastData] = React.useState<ForecastDataProps | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isOffline, setIsOffline] = React.useState(false);
+  const [cachedWeather, setCachedWeather] = useLocalStorage<WeatherDataProps | null>("cachedWeather", null);
+  const [cachedForecast, setCachedForecast] = useLocalStorage<ForecastDataProps | null>("cachedForecast", null);
   const [searchCity, setSearchCity] = React.useState("");
   const [error, setError] = React.useState<string | null>(null);
-  const[savedCities, setSavedCities] = useLocalStorage<string[]>
-  ("savedCities", []);
-const [theme, setTheme] =useLocalStorage<"light" | "dark">("theme", "light");
-const [unit, setUnit] = useLocalStorage<"C" | "F">("unit", "C");
-const [alerts,setAlerts] =React.useState<WeatherAlert[]>([]);
-useNotification(alerts);
-
-// Toogle theme
+  const [savedCities, setSavedCities] = useLocalStorage<string[]>("savedCities", []);
+  const [theme, setTheme] = useLocalStorage<"light" | "dark">("theme", "light");
+  const [unit, setUnit] = useLocalStorage<"C" | "F">("unit", "C");
+  const [alerts, setAlerts] = React.useState<WeatherAlert[]>([]);
+const [forecastView, setForecastView] =
+  React.useState<"hourly" | "daily">("hourly");
+  useNotification(alerts);
+const [lastLoadedCity, setLastLoadedCity] = React.useState("");
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
-  //convert temp from 'c to F
   const convertTemp = (temp: number) => {
-    if(unit === "C") {
-      return Math.round(temp);
-    }
-    return Math.round((temp * 9) / 5 + 32);
-  }
+    return unit === "C" ? Math.round(temp) : Math.round((temp * 9) / 5 + 32);
+  };
 
-  // Current weather by city
-  const fetchWeatherData = async (city: string) => {
-    const url = `${api_Endpoint}weather?q=${city}&appid=${api_key}&units=metric`;
-    const response = await axios.get(url);
+  const getChanceOfRain = () => {
+    if (!forecastData?.list?.length) return 0;
+    return forecastData.list[0].pop * 100;
+  };
+
+  const requestWeatherData = async (url: string) => {
+    if (!apiKey) {
+      throw new Error("Weather API key is missing.");
+    }
+
+    const response = await axios.get(url, { timeout: 10000 });
     return response.data;
   };
 
-const fetchWeatherByCoordinates = async (
+  const fetchWeatherData = async (city: string) => {
+    const url = `${apiEndpoint}weather?q=${city}&appid=${apiKey}&units=metric`;
+    return requestWeatherData(url);
+  };
+
+  const fetchWeatherByCoordinates = async (lat: number, lon: number) => {
+    const url = `${apiEndpoint}weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+    return requestWeatherData(url);
+  };
+
+  const fetchForecast = async (lat: number, lon: number) => {
+    const url = `${apiEndpoint}forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+    return requestWeatherData(url);
+  };
+
+const fetchWeatherAlerts = async (
   lat: number,
   lon: number
-) => {
-  const url = `${api_Endpoint}weather?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
-  const response = await axios.get(url);
-  return response.data;
-};
-  // 5 day / 3 hour forecast
-  const fetchForecast = async (lat: number, lon: number) => {
-    const url = `${api_Endpoint}forecast?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;
-    const response = await axios.get(url);
-    return response.data;
-  };
-
-  //catch alerts
-const fetchWeatherAlerts = async (
-  lat:number,
-  lon:number
-):Promise<WeatherAlert[]> => {
+): Promise<WeatherAlert[]> => {
+  if (!apiKey) return [];
 
   try {
+    const timelineUrl =
+      `https://api.openweathermap.org/data/4.0/onecall/timeline/1h` +
+      `?lat=${lat}` +
+      `&lon=${lon}` +
+      `&appid=${apiKey}` +
+      `&units=metric`;
 
-const url =
-`https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${lon}&appid=${api_key}&units=metric`;    const response = await axios.get(url);
-    return response.data.alerts || [];
+    const response = await axios.get(timelineUrl, {
+      timeout: 10000,
+    });
 
-  } catch(error){
-    console.log(
-      "No weather alerts available"
+    const data = response.data?.data ?? [];
+
+    // Get unique alert IDs from the timeline
+    const alertIds = [
+      ...new Set(
+        data.flatMap(
+          (item: { alerts?: string[] }) => item.alerts ?? []
+        )
+      ),
+    ];
+
+    if (alertIds.length === 0) {
+      return [];
+    }
+
+    // Get the full information for each alert
+    const alerts = await Promise.all(
+      alertIds.map(async (alertId) => {
+        try {
+          const alertUrl =
+            `https://api.openweathermap.org/data/4.0/onecall/alert/${alertId}` +
+            `?appid=${apiKey}`;
+
+          const alertResponse = await axios.get(alertUrl, {
+            timeout: 10000,
+          });
+
+          return alertResponse.data;
+        } catch (error) {
+          console.error(
+            `Failed to fetch alert ${alertId}:`,
+            error
+          );
+
+          return null;
+        }
+      })
     );
 
+    return alerts.filter(
+      (alert): alert is WeatherAlert => alert !== null
+    );
+  } catch (error) {
+    console.error("Failed to fetch weather alerts:", error);
     return [];
   }
-
 };
 
-//save cities 
-const saveCity = () => {
+  const saveCity = () => {
+    if (!weatherData) return;
 
-  if (!weatherData) return;
-  const exists =
-    savedCities.some(
-      city =>
-        city.toLowerCase() ===
-        weatherData.name.toLowerCase()
-    );
-  if (!exists) {
+    const exists = savedCities.some((city) => city.toLowerCase() === weatherData.name.toLowerCase());
+    if (!exists) {
+      setSavedCities([...savedCities, weatherData.name]);
+    }
+  };
 
-    setSavedCities([
-      ...savedCities,
-      weatherData.name
-    ]);
-  }
-}; 
-//remove a city
-const removeCity = (city: string) => {
-  setSavedCities(savedCities.filter(item => item !== city));
-}
+  const removeCity = (city: string) => {
+    setSavedCities((prev) => prev.filter((item) => item !== city));
+  };
 
-const loadCity = async (city: string) => {
-  setSearchCity(city);
-  setIsLoading(true);
-  setError(null);
-  try {
-    const weather = await fetchWeatherData(city);
-    setWeatherData(weather);
-    const forecast = await fetchForecast(
-      weather.coord.lat,
-      weather.coord.lon
-    );
+  const applyWeatherData = (currentWeather: WeatherDataProps, forecast: ForecastDataProps, weatherAlerts: WeatherAlert[]) => {
+    setWeatherData(currentWeather);
+    setCachedWeather(currentWeather);
     setForecastData(forecast);
-  } catch (err) {
-    setError("Unable to load city.");
-  } finally {
-    setIsLoading(false);
-  }
-};
+    setCachedForecast(forecast);
+    setAlerts(weatherAlerts);
+    setIsOffline(false);
+    setError(null);
+  };
+
+  const loadCity = async (city: string) => {
+    setSearchCity(city);
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const weather = await fetchWeatherData(city);
+      const forecast = await fetchForecast(weather.coord.lat, weather.coord.lon);
+      const weatherAlerts = await fetchWeatherAlerts(weather.coord.lat, weather.coord.lon);
+      applyWeatherData(weather, forecast, weatherAlerts);
+   setLastLoadedCity(weather.name);
+    } catch {
+      if (cachedWeather && cachedForecast) {
+        setWeatherData(cachedWeather);
+        setForecastData(cachedForecast);
+        setIsOffline(true);
+        setError(null);
+      } else {
+        setIsOffline(false);
+        setError("Unable to load city.");
+        setWeatherData(null)
+        setForecastData(null)
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleSearch = async () => {
-    if (!searchCity.trim()) return;
+  const city = searchCity.trim();
+
+  if (!city) return;
+
+  // Don't request the same city again
+  if (
+    city.toLowerCase() ===
+    lastLoadedCity.toLowerCase()
+  ) {
+    return;
+  }
 
     setIsLoading(true);
     setError(null);
 
     try {
       const currentWeatherData = await fetchWeatherData(searchCity);
-
-      setWeatherData(currentWeatherData);
-      const lat = currentWeatherData.coord.lat;
-      const lon = currentWeatherData.coord.lon;
-
-      const forecast = await fetchForecast(
-      lat,
-      lon
-      );
-
-      setForecastData(forecast);
-      const weatherAlerts =
-await fetchWeatherAlerts(
- lat,
- lon
-);
-
-setAlerts(weatherAlerts);
-
+      const forecast = await fetchForecast(currentWeatherData.coord.lat, currentWeatherData.coord.lon);
+      const weatherAlerts = await fetchWeatherAlerts(currentWeatherData.coord.lat, currentWeatherData.coord.lon);
+      applyWeatherData(currentWeatherData, forecast, weatherAlerts);
     } catch {
-      setError("City not found.");
-
-      setWeatherData(null);
-      setForecastData(null);
-
+      if (cachedWeather && cachedForecast) {
+        setWeatherData(cachedWeather);
+        setForecastData(cachedForecast);
+        setIsOffline(true);
+        setError(null);
+      } else {
+        setIsOffline(false);
+        setError("Unable to load weather data. Please check your internet connection.");
+        setWeatherData(null);
+        setForecastData(null);
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
-
-  // Convert API data for HourlyForecast component
   const getHourlyData = () => {
     if (!forecastData?.list) return [];
 
     return forecastData.list.slice(0, 8).map((item) => ({
       dt: item.dt,
-      temp:item.main.temp,
+      temp: item.main.temp,
       weather: item.weather,
     }));
   };
 
+  const getDailyData = () => {
+    if (!forecastData) return [];
 
-  // Convert API data for DailyForecast component
-const getDailyData = () => {
-  if (!forecastData) return [];
+    const dailyGroups: { [key: string]: typeof forecastData.list } = {};
 
-  const dailyGroups: {
-    [key: string]: typeof forecastData.list;
-  } = {};
-
-  forecastData.list.forEach((item) => {
-    const date = new Date(item.dt * 1000).toLocaleDateString();
-
-    if (!dailyGroups[date]) {
-      dailyGroups[date] = [];
-    }
-
-    dailyGroups[date].push(item);
-  });
-
-  return Object.values(dailyGroups)
-    .slice(0, 5)
-    .map((dayForecasts) => {
-
-      const temps = dayForecasts.map(
-        item => item.main.temp
-      );
-
-      return {
-        dt: dayForecasts[0].dt,
-
-        temp: {
-          day: Math.round(dayForecasts[0].main.temp),
-
-          min: Math.round(Math.min(...temps)),
-
-          max: Math.round(Math.max(...temps)),
-        },
-
-        weather: dayForecasts[0].weather
-      };
+    forecastData.list.forEach((item) => {
+      const date = new Date(item.dt * 1000).toLocaleDateString();
+      if (!dailyGroups[date]) dailyGroups[date] = [];
+      dailyGroups[date].push(item);
     });
-};
 
-React.useEffect(() => {
-  //get permision for notifications
-  if ("Notification" in window) {
-  if (Notification.permission !== "granted") {
-    Notification.requestPermission();
-  }
-}
-  setIsLoading(true);
+    return Object.values(dailyGroups)
+      .slice(0, 5)
+      .map((dayForecasts) => {
+        const temps = dayForecasts.map((item) => item.main.temp);
 
+        return {
+          dt: dayForecasts[0].dt,
+          temp: {
+            day: Math.round(dayForecasts[0].main.temp),
+            min: Math.round(Math.min(...temps)),
+            max: Math.round(Math.max(...temps)),
+          },
+          weather: dayForecasts[0].weather,
+        };
+      });
+  };
+const loadCurrentLocation = () => {
   if (!navigator.geolocation) {
-    setError(
-      "Geolocation is not supported by your browser."
-    );
-    setIsLoading(false);
+    setError("Geolocation is not supported by your browser.");
     return;
   }
+
+  setIsLoading(true);
+  setError(null);
 
   navigator.geolocation.getCurrentPosition(
     async (position) => {
       try {
-        const {
-          latitude,
-          longitude
-        } = position.coords;
+        const { latitude, longitude } = position.coords;
 
         const currentWeather =
           await fetchWeatherByCoordinates(
             latitude,
             longitude
           );
-        setWeatherData(currentWeather);
-        const forecast =
-          await fetchForecast(
+
+        const forecast = await fetchForecast(
+          latitude,
+          longitude
+        );
+
+        const weatherAlerts =
+          await fetchWeatherAlerts(
             latitude,
             longitude
           );
-        setForecastData(forecast);
-        const weatherAlerts =
-await fetchWeatherAlerts(
- latitude,
- longitude
-);
-setAlerts(weatherAlerts);
-      } catch {
-        setError(
-          "Unable to fetch local weather data."
+
+        applyWeatherData(
+          currentWeather,
+          forecast,
+          weatherAlerts
         );
+
+        // Clear the search field because
+        // we are showing the user's location.
+        setSearchCity("");
+
+      } catch {
+        if (cachedWeather && cachedForecast) {
+          setWeatherData(cachedWeather);
+          setForecastData(cachedForecast);
+          setIsOffline(true);
+          setError(null);
+        } else {
+          setError(
+            "Unable to load your current location."
+          );
+        }
       } finally {
         setIsLoading(false);
       }
     },
-
-    async () => {
-
-      try {
-        const data =
-          await fetchWeatherData(
-            "Polokwane"
-          );
-        setWeatherData(data);
-        const forecast =
-          await fetchForecast(
-            data.coord.lat,
-            data.coord.lon
-          );
-        setForecastData(forecast);
-        const weatherAlerts =
-await fetchWeatherAlerts(
-  data.coord.lat,
-  data.coord.lon
-);
-
-setAlerts(weatherAlerts);
-      } catch {
-        setError(
-          "Unable to fetch default city weather data."
-        );
-      } finally {
-        setIsLoading(false);
-      }
+    () => {
+      setIsLoading(false);
+      setError(
+        "Location permission was denied. Please allow location access."
+      );
     }
   );
-}, []);
+};
+  React.useEffect(() => {
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, []);
 
-return (
-  <div className={`MainWrapper ${theme}`}>
-    <button
-      className="themeButton"
-      onClick={toggleTheme}>
-    
-      {theme === "light" ? "🌙 Dark" : "☀️ Light"}
-    </button>
-<button
-  className="unitButton"
-  onClick={() =>
-    setUnit(prev => prev === "C" ? "F" : "C")
-  }
->
-  °{unit}
-</button>
-    <div className="container">
+  React.useEffect(() => {
+    const loadInitialWeather = async () => {
+      setIsLoading(true);
+      setError(null);
 
-      <SearchBar
-        searchCity={searchCity}
-        setSearchCity={setSearchCity}
-        handleSearch={handleSearch}
-      saveCity={saveCity}
-      savedCities={savedCities}
-      loadCity={loadCity}
-      removeCity={removeCity}
- />
-
-      {isLoading ? 
- <Loading />
-
-      : error ? 
-
-        <p className="error">{error}</p>
-
-      : weatherData &&
-        <>
-
-          <WeatherInfo
-            name={weatherData.name}
-            country={weatherData.sys.country}
-            temp={convertTemp(weatherData.main.temp)}
-            weather={weatherData.weather[0].main}
-            unit={unit}
-          />
-<WeatherAlerts
- alerts={alerts}
-/>
-
-          <BottomInfo
-            humidity={weatherData.main.humidity}
-            windSpeed={Math.round(weatherData.wind.speed * 3.6)}
-          />
-
-              <HourlyForecast
-                hourlyData={getHourlyData()}
-                unit={unit}
-                convertTemp={convertTemp}
-              />
-              <DailyForecast
-                dailyData={getDailyData()}
-                unit={unit}
-                convertTemp={convertTemp}
-              />
-            </>
+      if (!navigator.geolocation) {
+        try {
+          const data = await fetchWeatherData("Polokwane");
+          const forecast = await fetchForecast(data.coord.lat, data.coord.lon);
+          const weatherAlerts = await fetchWeatherAlerts(data.coord.lat, data.coord.lon);
+          applyWeatherData(data, forecast, weatherAlerts);
+        } catch {
+          if (cachedWeather && cachedForecast) {
+            setWeatherData(cachedWeather);
+            setForecastData(cachedForecast);
+            setIsOffline(true);
+            setError(null);
+          } else {
+            setError("Unable to load weather data.");
+          }
+        } finally {
+          setIsLoading(false);
         }
+        return;
+      }
 
-        </div>
-        </div>
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const { latitude, longitude } = position.coords;
+            const currentWeather = await fetchWeatherByCoordinates(latitude, longitude);
+            const forecast = await fetchForecast(latitude, longitude);
+            const weatherAlerts = await fetchWeatherAlerts(latitude, longitude);
+            applyWeatherData(currentWeather, forecast, weatherAlerts);
+          } catch {
+            try {
+              const data = await fetchWeatherData("Polokwane");
+              const forecast = await fetchForecast(data.coord.lat, data.coord.lon);
+              const weatherAlerts = await fetchWeatherAlerts(data.coord.lat, data.coord.lon);
+              applyWeatherData(data, forecast, weatherAlerts);
+            } catch {
+              if (cachedWeather && cachedForecast) {
+                setWeatherData(cachedWeather);
+                setForecastData(cachedForecast);
+                setIsOffline(true);
+                setError(null);
+              } else {
+                setError("Unable to fetch local weather data.");
+              }
+            }
+          } finally {
+            setIsLoading(false);
+          }
+        },
+        async () => {
+          try {
+            const data = await fetchWeatherData("Polokwane");
+            const forecast = await fetchForecast(data.coord.lat, data.coord.lon);
+            const weatherAlerts = await fetchWeatherAlerts(data.coord.lat, data.coord.lon);
+            applyWeatherData(data, forecast, weatherAlerts);
+          } catch {
+            if (cachedWeather && cachedForecast) {
+              setWeatherData(cachedWeather);
+              setForecastData(cachedForecast);
+              setIsOffline(true);
+              setError(null);
+            } else {
+              setError("Unable to load weather data.");
+            }
+          } finally {
+            setIsLoading(false);
+          }
+        },
+        {
+          enableHighAccuracy: false,
+          timeout: 10000,
+          maximumAge: 300000,
+        }
+      );
+    };
+
+    void loadInitialWeather();
+  }, []);
+
+  return (
+    <div className={`app ${theme}`}>
+      <div className="dashboard">
+        <Sidebar
+          savedCities={savedCities}
+          loadCity={loadCity}
+          removeCity={removeCity}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          unit={unit}
+          toggleUnit={() => setUnit((prev) => (prev === "C" ? "F" : "C"))}
+        />
+
+        <main className="dashboardMain">
+          <SearchBar
+            searchCity={searchCity}
+            setSearchCity={setSearchCity}
+            handleSearch={handleSearch}
+            saveCity={saveCity}
+          />
+ <button
+    type="button"
+    className="locationButton"
+    onClick={loadCurrentLocation}
+  >
+    📍 My Location
+  </button>
+          {isOffline && (
+            <div className="offlineNotice" role="status">
+              Youre offline. Showing the last cached weather data.
+            </div>
+          )}
+
+          {isLoading ? (
+            <Loading />
+          ) : error ? (
+            <p className="error">{error}</p>
+          ) : weatherData ? (
+            <>
+              <WeatherInfo
+                name={weatherData.name}
+                country={weatherData.sys.country}
+                temp={convertTemp(weatherData.main.temp)}
+                weather={weatherData.weather[0].main}
+                unit={unit}
+              />
+
+              <WeatherAlerts alerts={alerts} />
+
+              <WeatherHighlights
+                feelsLike={weatherData.main.feels_like}
+                humidity={weatherData.main.humidity}
+                pressure={weatherData.main.pressure}
+                windSpeed={weatherData.wind.speed}
+                sunrise={weatherData.sys.sunrise}
+                sunset={weatherData.sys.sunset}
+                visibility={weatherData.visibility}
+                chanceOfRain={getChanceOfRain()}
+                timezone={weatherData.timezone}
+                unit={unit}
+                convertTemp={convertTemp}
+              />
+
+              <div className="forecastSection">
+  <div className="forecastTabs">
+    <button
+      type="button"
+      className={forecastView === "hourly" ? "active" : ""}
+      onClick={() => setForecastView("hourly")}
+    >
+      Hourly
+    </button>
+
+    <button
+      type="button"
+      className={forecastView === "daily" ? "active" : ""}
+      onClick={() => setForecastView("daily")}
+    >
+      Daily
+    </button>
+  </div>
+
+  {forecastView === "hourly" ? (
+    <HourlyForecast
+      hourlyData={getHourlyData()}
+      unit={unit}
+      convertTemp={convertTemp}
+    />
+  ) : (
+    <DailyForecast
+      dailyData={getDailyData()}
+      unit={unit}
+      convertTemp={convertTemp}
+    />
+  )}
+</div>
+            </>
+          ) : (
+            <p className="error">Search for a city to get started.</p>
+          )}
+        </main>
+      </div>
+    </div>
   );
-}
+};

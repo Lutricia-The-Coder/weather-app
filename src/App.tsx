@@ -3,13 +3,7 @@ import './App.css'
 import { DisplayWeather } from './components/DisplayWeather'
 
 function App() {
- 
-
-  return (
-    <>
-      <DisplayWeather />
-    </>
-  )
+  return <DisplayWeather />
 }
 
 export default App
