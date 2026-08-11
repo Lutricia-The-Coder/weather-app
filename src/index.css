@@ -91,7 +91,7 @@ button:active {
 }
 
 .searchCircle, .saveButton {
-  border-radius: 50%;
+  border-radius: 70%;
   padding: 8px;
 }
 
@@ -204,16 +204,14 @@ button:active {
   animation: spin 1s linear infinite;
 }
 /*weatherhighlight */
-/* =========================
-   TODAY'S HIGHLIGHTS
-========================= */
+ 
 
 .weatherHighlights {
+  margin-top: 2rem;
   background: white;
   border-radius: 24px;
   padding: 24px;
   margin-bottom: 25px;
-
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
 }
 
@@ -400,6 +398,7 @@ button:active {
 }
 
 .locationButton {
+  width: 110px;
   white-space: nowrap;
   padding: 10px 16px;
   border-radius: 10px;
@@ -550,7 +549,8 @@ button:active {
    .dashboard { flex-direction: column; min-height: 100vh; } /* Sidebar becomes a top section */ .sidebar { width: 100%; flex: none; box-sizing: border-box; padding: 15px; gap: 10px; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; } .sidebar > * { flex-shrink: 0; } .dashboardMain { width: 100%; box-sizing: border-box; padding: 15px; min-width: 0; gap: 15px; overflow-x: hidden; } /* Search */ .searchContainer, .searchArea { width: 100%; box-sizing: border-box; } /* Highlights */ .highlightGrid { grid-template-columns: repeat(2, 1fr); } .weatherHighlights { 
   padding: 18px; border-radius: 18px; } /* Daily forecast */ .forecastGrid { grid-template-columns: repeat(2, 1fr); } /* Weather information */ .weatherArea h1 { font-size: 1.7rem; } .weatherArea .icon { font-size: 2.7rem; } /* Saved cities */ .savedCities { width: 100%; } /* Buttons */ .toggleButton, .unitButton { min-width: 75px; } }
 @media (max-width: 480px) { 
-  .dashboard { display: flex; flex-direction: column; } .sidebar { padding: 12px; gap: 8px; } .dashboardMain { padding: 12px; gap: 12px; } /* Search becomes vertical */ .searchContainer { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; } .searchArea { flex-direction: column; align-items: stretch; gap: 8px; } .searchContainer input { width: 100%; min-width: 0; box-sizing: border-box; } .locationButton { width: 100%; } /* Highlights */ .weatherHighlights { padding: 15px; border-radius: 16px; } .highlightGrid { grid-template-columns: 1fr; gap: 10px; } .highlightCard { min-height: 105px; padding: 15px; } .highlightCard strong { font-size: 23px; } /* Forecast */ .forecastGrid { grid-template-columns: 1fr 1fr; gap: 10px; } .forecastDay { padding: 10px; } .forecastHour { flex: 0 0 85px; padding: 8px; } /* Weather information */ .weatherArea h1 { font-size: 1.6rem; } .weatherArea span { font-size: 0.9rem; } .weatherArea .icon { font-size: 2.5rem; } .weatherArea h2 { font-size: 1rem; } /* Forecast tabs */ .forecastTabs { flex-wrap: wrap; } .forecastTabs button { flex: 1; min-width: 120px; } /* Offline notice */ .offlineNotice { font-size: 0.85rem; padding: 10px 12px; } /* Alerts */ .alertCard { padding: 10px; } .alertCard p { font-size: 0.9rem; line-height: 1.4; } }
+  .dashboard { display: flex; flex-direction: column; } .sidebar { padding: 12px; gap: 8px; } .dashboardMain { padding: 12px; gap: 12px; } /* Search becomes vertical */ .searchContainer { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; } .searchArea { flex-direction: column; align-items: stretch; gap: 8px; } .searchContainer input { width: 100%; min-width: 0; box-sizing: border-box; }
+   .locationButton { width: 100%; } /* Highlights */ .weatherHighlights { padding: 15px; border-radius: 16px; } .highlightGrid { grid-template-columns: 1fr; gap: 10px; } .highlightCard { min-height: 105px; padding: 15px; } .highlightCard strong { font-size: 23px; } /* Forecast */ .forecastGrid { grid-template-columns: 1fr 1fr; gap: 10px; } .forecastDay { padding: 10px; } .forecastHour { flex: 0 0 85px; padding: 8px; } /* Weather information */ .weatherArea h1 { font-size: 1.6rem; } .weatherArea span { font-size: 0.9rem; } .weatherArea .icon { font-size: 2.5rem; } .weatherArea h2 { font-size: 1rem; } /* Forecast tabs */ .forecastTabs { flex-wrap: wrap; } .forecastTabs button { flex: 1; min-width: 120px; } /* Offline notice */ .offlineNotice { font-size: 0.85rem; padding: 10px 12px; } /* Alerts */ .alertCard { padding: 10px; } .alertCard p { font-size: 0.9rem; line-height: 1.4; } }
 @media (max-width: 320px) {
    .sidebar { padding: 10px; gap: 6px; } 
    .dashboardMain { padding: 10px; gap: 10px; }

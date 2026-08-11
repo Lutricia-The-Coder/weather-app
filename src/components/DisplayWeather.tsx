@@ -96,6 +96,7 @@ const [lastLoadedCity, setLastLoadedCity] = React.useState("");
 
   const fetchWeatherData = async (city: string) => {
     const url = `${apiEndpoint}weather?q=${city}&appid=${apiKey}&units=metric`;
+    
     return requestWeatherData(url);
   };
 
@@ -482,7 +483,7 @@ const loadCurrentLocation = () => {
   >
     📍 My Location
   </button>
-          {isOffline && (
+         {isOffline && (
             <div className="offlineNotice" role="status">
               Youre offline. Showing the last cached weather data.
             </div>
@@ -504,19 +505,6 @@ const loadCurrentLocation = () => {
 
               <WeatherAlerts alerts={alerts} />
 
-              <WeatherHighlights
-                feelsLike={weatherData.main.feels_like}
-                humidity={weatherData.main.humidity}
-                pressure={weatherData.main.pressure}
-                windSpeed={weatherData.wind.speed}
-                sunrise={weatherData.sys.sunrise}
-                sunset={weatherData.sys.sunset}
-                visibility={weatherData.visibility}
-                chanceOfRain={getChanceOfRain()}
-                timezone={weatherData.timezone}
-                unit={unit}
-                convertTemp={convertTemp}
-              />
 
               <div className="forecastSection">
   <div className="forecastTabs">
@@ -550,6 +538,20 @@ const loadCurrentLocation = () => {
       convertTemp={convertTemp}
     />
   )}
+  
+              <WeatherHighlights
+                feelsLike={weatherData.main.feels_like}
+                humidity={weatherData.main.humidity}
+                pressure={weatherData.main.pressure}
+                windSpeed={weatherData.wind.speed}
+                sunrise={weatherData.sys.sunrise}
+                sunset={weatherData.sys.sunset}
+                visibility={weatherData.visibility}
+                chanceOfRain={getChanceOfRain()}
+                timezone={weatherData.timezone}
+                unit={unit}
+                convertTemp={convertTemp}
+              />
 </div>
             </>
           ) : (
