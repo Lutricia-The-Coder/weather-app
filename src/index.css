@@ -385,11 +385,6 @@ button:active {
   margin-bottom: 15px;
 }
 
-.app.dark .offlineNotice {
-  background: #3b3218;
-  color: #ffd966;
-  border-color: #66551f;
-}
 .searchArea {
   display: flex;
   align-items: center;
@@ -398,7 +393,7 @@ button:active {
 }
 
 .locationButton {
-  width: 110px;
+  width: 125px;
   white-space: nowrap;
   padding: 10px 16px;
   border-radius: 10px;
@@ -424,77 +419,310 @@ button:active {
 
 
 /* Dark theme */
+/* ===========================
+   DARK THEME - Dashboard Style
+=========================== */
+
 .app.dark {
-  background: #121212;
-  color: #fff;
+  background: #0B1220;
+  color: #F8FAFC;
 }
 
+
+/* Sidebar */
+
 .app.dark .sidebar {
-  background: linear-gradient(180deg, #1E1E2F, #2C2C3A);
-  border-right: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(
+    180deg,
+    #111827,
+    #0F172A
+  );
+
+  border-right: 1px solid rgba(255,255,255,0.08);
 }
+
+
+/* Main cards */
 
 .app.dark .card,
 .app.dark .searchContainer,
 .app.dark .forecastHour,
 .app.dark .forecastDay,
 .app.dark .alertCard {
-  background: rgba(255,255,255,0.05);
-  color: #fff;
+
+  background: #162033;
+  color: #F8FAFC;
+
+  border: 1px solid rgba(255,255,255,0.05);
 }
+
+
+/* Search bar */
+
+.app.dark .searchContainer {
+
+  background: #162033;
+
+}
+
+.app.dark .searchContainer input {
+
+  background: transparent;
+  color: white;
+
+}
+
+.app.dark .searchContainer input::placeholder {
+
+  color: #94A3B8;
+
+}
+
+
+/* Buttons */
 
 .app.dark button {
-  background: #2C2C3A;
-  color: #fff;
+
+  background: #1E293B;
+  color: #F8FAFC;
+
 }
+
 
 .app.dark button:hover {
-  background: #3A3A4A;
+
+  background: #334155;
+
 }
 
-.app.dark .alertCard {
-  border-left-color: #ff6b6b;
+
+/* Active tabs */
+
+.app.dark .forecastTabs button.active {
+
+  background: #7C3AED;
+  color: white;
+
 }
+
+
+/* Weather highlights container */
+
+.app.dark .weatherHighlights {
+
+  background: #162033;
+
+}
+
+
+/* Highlight cards */
+
+.app.dark .highlightCard {
+
+  background: #1E293B;
+
+}
+
+
+.app.dark .highlightTitle {
+
+  color: #94A3B8;
+
+}
+
+
+.app.dark .highlightCard small {
+
+  color: #94A3B8;
+
+}
+
+
+/* Location button */
+
+.app.dark .locationButton {
+
+  background: #7C3AED;
+  color: white;
+
+}
+
+
+.app.dark .locationButton:hover {
+
+  background: #6D28D9;
+
+}
+
+
+/* Offline warning */
+
+.app.dark .offlineNotice {
+
+  background: #422006;
+  color: #FDE68A;
+  border-color: #92400E;
+
+}
+
+
+/* Loading */
 
 .app.dark .loading-icon {
-  color: #FFC436;
+
+  color: #A78BFA;
+
+}
+/* Light theme */
+/* ===========================
+   LIGHT THEME
+=========================== */
+
+.app.light {
+  background: #F1F5F9;
+  color: #1E293B;
 }
 
-/* Light theme */
-.app.light {
-  background: #f5f5f5;
-  color: #222;
-}
+
+/* Sidebar */
 
 .app.light .sidebar {
-  background: linear-gradient(180deg, #ffffff, #eaeaea);
-  border-right: 1px solid rgba(0,0,0,0.1);
+  background: linear-gradient(
+    180deg,
+    #E8EEF7,
+    #DDE6F2
+  );
+
+  border-right: 1px solid #E2E8F0;
 }
+
+
+/* Cards */
 
 .app.light .card,
 .app.light .searchContainer,
 .app.light .forecastHour,
 .app.light .forecastDay,
 .app.light .alertCard {
-  background: #fff;
-  color: #222;
+
+  background: #FFFFFF;
+  color: #1E293B;
+
+  border: 1px solid #E2E8F0;
+
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
 }
 
+
+/* Search */
+
+.app.light .searchContainer {
+  background: #FFFFFF;
+}
+
+.app.light .searchContainer input {
+  background: transparent;
+  color: #1E293B;
+}
+
+.app.light .searchContainer input::placeholder {
+  color: #94A3B8;
+}
+
+
+/* Buttons */
+
 .app.light button {
-  background: #e0e0e0;
-  color: #222;
+  background: #E2E8F0;
+  color: #1E293B;
 }
 
 .app.light button:hover {
-  background: #d5d5d5;
+  background: #CBD5E1;
 }
 
-.app.light .alertCard {
-  border-left-color: #d9534f;
+
+/* Hourly / Daily buttons */
+
+.app.light .forecastTabs button {
+  background: #E2E8F0;
+  color: #64748B;
 }
+
+.app.light .forecastTabs button:hover {
+  background: #CBD5E1;
+  color: #1E293B;
+}
+
+.app.light .forecastTabs button.active {
+  background: #7C3AED;
+  color: #FFFFFF;
+
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
+}
+
+.app.light .forecastTabs button.active:hover {
+  background: #6D28D9;
+}
+
+
+/* Weather Highlights */
+
+.app.light .weatherHighlights {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
+}
+
+
+/* Highlight cards */
+
+.app.light .highlightCard {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+}
+
+.app.light .highlightTitle {
+  color: #64748B;
+}
+
+.app.light .highlightCard small {
+  color: #64748B;
+}
+
+
+/* Location button */
+
+.app.light .locationButton {
+  background: #7C3AED;
+  color: white;
+}
+
+.app.light .locationButton:hover {
+  background: #6D28D9;
+}
+/*yoast*/
+.Toastify__toast--success {
+  --toastify-color-success: #7C3AED;
+}
+
+.Toastify__toast--error {
+  --toastify-color-error: #EF4444;
+}
+
+
+/* Loading */
 
 .app.light .loading-icon {
-  color: #ff9800;
+  color: #7C3AED;
+}
+
+
+/* Alerts */
+
+.app.light .alertCard {
+  border-left-color: #7C3AED;
 }
 .toggleButton {
   background: #2C2C3A;
@@ -508,9 +736,6 @@ button:active {
   text-align: center;
 }
 
-.toggleButton:hover {
-  background: #3A3A4A;
-}
 .unitButton {
   background: #2C2C3A;
   color: #fff;
@@ -526,14 +751,24 @@ button:active {
   min-width: 80px;      /* ensures consistent width */
   text-align: center;
 }
+.toggleButton,
+.unitButton {
 
+background:#1E293B;
+color:#F8FAFC;
+
+border-radius:10px;
+
+min-width:80px;
+
+}
+.toggleButton:hover,
 .unitButton:hover {
-  background: #3A3A4A;
+
+background:#334155;
+
 }
 
-.toggleButton:hover {
-  background: #3A3A4A;
-}
 
 @media (max-width: 1200px) {
    .sidebar { flex: 0 0 210px; padding: 18px; }

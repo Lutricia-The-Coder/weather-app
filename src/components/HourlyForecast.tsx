@@ -5,7 +5,10 @@ interface HourlyForecastProps {
   hourlyData: {
     dt: number;
     temp: number;
-    weather: { main: string }[];
+    weather: { main: string,
+      icon:string,
+      description:string;
+     };
   }[];
   unit: "C" | "F";
   convertTemp: (temp: number) => number;
@@ -27,13 +30,15 @@ export const HourlyForecast = ({ hourlyData, unit, convertTemp }: HourlyForecast
             className="forecastHour"
             aria-label={
               `At ${formatHour(hour.dt)},
-              ${hour.weather[0].main},
+              ${hour.weather.main},
               ${convertTemp(hour.temp)}°${unit}`
             }
           >
             <p>{formatHour(hour.dt)}</p>
             <div className="forecastIcon">
-              {iconChanger(hour.weather[0].main)}</div>
+              {iconChanger(hour.weather.icon,
+                hour.weather.description
+              )}</div>
             <p>{convertTemp(hour.temp)}°{unit}</p>
           </div>
         ))}

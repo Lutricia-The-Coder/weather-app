@@ -1,5 +1,6 @@
 
 import React from "react";
+import { useNotification } from "../hooks/useNotification";
 
 export interface WeatherAlert {
   sender_name: string;
@@ -17,6 +18,7 @@ export const WeatherAlerts: React.FC<WeatherAlertsProps> = ({
   alerts = [],
 }) => {
   const [showAlerts, setShowAlerts] = React.useState(true);
+  useNotification(alerts);
 
   const formatTime = (timestamp: number) => {
     return new Date(timestamp * 1000).toLocaleString();

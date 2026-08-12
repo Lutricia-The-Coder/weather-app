@@ -1,4 +1,14 @@
 import React from "react";
+import {
+  Thermometer,
+  Droplets,
+  Gauge,
+  Wind,
+  CloudRain,
+  Eye,
+  Sunrise as SunriseIcon,
+  Sunset as SunsetIcon,
+} from "lucide-react";
 
 interface WeatherHighlightsProps {
   feelsLike: number;
@@ -9,7 +19,7 @@ interface WeatherHighlightsProps {
   sunset: number;
   visibility: number;
   chanceOfRain: number;
-  timezone:number;
+  timezone: number;
   unit: "C" | "F";
   convertTemp: (temp: number) => number;
 }
@@ -27,21 +37,19 @@ export const WeatherHighlights: React.FC<WeatherHighlightsProps> = ({
   unit,
   convertTemp,
 }) => {
-
   const formatTime = (timestamp: number) => {
-   const date =  new Date((timestamp + timezone)*1000);
+    const date = new Date((timestamp + timezone) * 1000);
 
     return date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
-      timeZone:"UTC",
+      timeZone: "UTC",
     });
   };
 
   return (
     <section className="weatherHighlights">
-
       <div className="sectionHeader">
         <h2>Today's Highlight</h2>
       </div>
@@ -51,7 +59,8 @@ export const WeatherHighlights: React.FC<WeatherHighlightsProps> = ({
         {/* FEELS LIKE */}
         <div className="highlightCard">
           <div className="highlightTitle">
-            🌡️ <span>Feels Like</span>
+            <Thermometer size={20} strokeWidth={2} />
+            <span>Feels Like</span>
           </div>
 
           <strong>
@@ -59,16 +68,14 @@ export const WeatherHighlights: React.FC<WeatherHighlightsProps> = ({
           </strong>
         </div>
 
-
         {/* HUMIDITY */}
         <div className="highlightCard">
           <div className="highlightTitle">
-            💧 <span>Humidity</span>
+            <Droplets size={20} strokeWidth={2} />
+            <span>Humidity</span>
           </div>
 
-          <strong>
-            {humidity}%
-          </strong>
+          <strong>{humidity}%</strong>
 
           <small>
             {humidity < 40
@@ -79,86 +86,73 @@ export const WeatherHighlights: React.FC<WeatherHighlightsProps> = ({
           </small>
         </div>
 
-
         {/* PRESSURE */}
         <div className="highlightCard">
           <div className="highlightTitle">
-            🧭 <span>Pressure</span>
+            <Gauge size={20} strokeWidth={2} />
+            <span>Pressure</span>
           </div>
 
-          <strong>
-            {pressure}
-          </strong>
+          <strong>{pressure}</strong>
 
           <small>hPa</small>
         </div>
 
-
         {/* WIND */}
         <div className="highlightCard">
           <div className="highlightTitle">
-            💨 <span>Wind Status</span>
+            <Wind size={20} strokeWidth={2} />
+            <span>Wind Status</span>
           </div>
 
-          <strong>
-            {Math.round(windSpeed * 3.6)}
-          </strong>
+          <strong>{Math.round(windSpeed * 3.6)}</strong>
 
           <small>km/h</small>
         </div>
 
-
         {/* CHANCE OF RAIN */}
         <div className="highlightCard">
           <div className="highlightTitle">
-            🌧️ <span>Chance of Rain</span>
+            <CloudRain size={20} strokeWidth={2} />
+            <span>Chance of Rain</span>
           </div>
 
-          <strong>
-            {Math.round(chanceOfRain)}%
-          </strong>
+          <strong>{Math.round(chanceOfRain)}%</strong>
         </div>
-
 
         {/* VISIBILITY */}
         <div className="highlightCard">
           <div className="highlightTitle">
-            👁️ <span>Visibility</span>
+            <Eye size={20} strokeWidth={2} />
+            <span>Visibility</span>
           </div>
 
-          <strong>
-            {(visibility / 1000).toFixed(1)}
-          </strong>
+          <strong>{(visibility / 1000).toFixed(1)}</strong>
 
           <small>km</small>
         </div>
 
-
         {/* SUNRISE */}
         <div className="highlightCard">
           <div className="highlightTitle">
-            🌅 <span>Sunrise</span>
+            <SunriseIcon size={20} strokeWidth={2} />
+            <span>Sunrise</span>
           </div>
 
-          <strong>
-            {formatTime(sunrise)}
-          </strong>
+          <strong>{formatTime(sunrise)}</strong>
         </div>
-
 
         {/* SUNSET */}
         <div className="highlightCard">
           <div className="highlightTitle">
-            🌇 <span>Sunset</span>
+            <SunsetIcon size={20} strokeWidth={2} />
+            <span>Sunset</span>
           </div>
 
-          <strong>
-            {formatTime(sunset)}
-          </strong>
+          <strong>{formatTime(sunset)}</strong>
         </div>
 
       </div>
-
     </section>
   );
 };

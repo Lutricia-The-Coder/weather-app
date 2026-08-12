@@ -5,7 +5,10 @@ interface DailyForecastProps {
   dailyData: {
     dt: number;
     temp: { day: number; min: number; max: number };
-    weather: { main: string }[];
+    weather: { main: string ;
+      icon:string;
+      description:string;
+    };
   }[];
   unit: "C" | "F";
   convertTemp: (temp: number) => number;
@@ -25,14 +28,16 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ dailyData = [], un
             key={day.dt}
             className="forecastDay"
             aria-label={`${formatDay(day.dt)}:
-            ${day.weather[0].main},
+            ${day.weather.main},
             Day ${convertTemp(day.temp.day)}°${unit},
             Min ${convertTemp(day.temp.min)}°${unit},
             Max ${convertTemp(day.temp.max)}°${unit}`}
           >
             <p>{formatDay(day.dt)}</p>
             <div className="forecastIcon">
-              {iconChanger(day.weather[0].main)}</div>
+              {iconChanger(day.weather.icon,
+                day.weather.description
+              )}</div>
             <p>Day: {convertTemp(day.temp.day)}°{unit}</p>
             <p>Min: {convertTemp(day.temp.min)}°{unit}{"/"}
               Max: {convertTemp(day.temp.max)}°{unit}</p>

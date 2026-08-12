@@ -10,7 +10,8 @@ import { WeatherAlerts, type WeatherAlert } from "./WeatherAlerts";
 import { useNotification } from "../hooks/useNotification";
 import { Sidebar } from "./Sidebar";
 import { WeatherHighlights } from "./WeatherHighlights";
-
+import { toast } from "react-toastify";
+import { ToastContainer } from "react-toastify"
 interface WeatherDataProps {
   name: string;
   main: {
@@ -27,6 +28,7 @@ interface WeatherDataProps {
   weather: {
     main: string;
     description: string;
+    icon:string;
   }[];
   wind: {
     speed: number;
@@ -47,6 +49,8 @@ interface ForecastDataProps {
     };
     weather: {
       main: string;
+      icon:string;
+      description:string;
     }[];
     pop: number;
   }[];
@@ -95,9 +99,10 @@ const [lastLoadedCity, setLastLoadedCity] = React.useState("");
   };
 
   const fetchWeatherData = async (city: string) => {
-    const url = `${apiEndpoint}weather?q=${city}&appid=${apiKey}&units=metric`;
-    
-    return requestWeatherData(url);
+    const url = await fetch(`${apiEndpoint}weather?q=${city}&appid=${apiKey}&units=metric`
+    )
+     const data = await url.json();
+  return data; 
   };
 
   const fetchWeatherByCoordinates = async (lat: number, lon: number) => {
@@ -182,11 +187,15 @@ const fetchWeatherAlerts = async (
     const exists = savedCities.some((city) => city.toLowerCase() === weatherData.name.toLowerCase());
     if (!exists) {
       setSavedCities([...savedCities, weatherData.name]);
+      toast.success("City saved sucessfully.")
+    }else{
+      toast.error("City already exists!");
     }
   };
 
   const removeCity = (city: string) => {
     setSavedCities((prev) => prev.filter((item) => item !== city));
+ toast.error("City deleted!");
   };
 
   const applyWeatherData = (currentWeather: WeatherDataProps, forecast: ForecastDataProps, weatherAlerts: WeatherAlert[]) => {
@@ -229,41 +238,57 @@ const fetchWeatherAlerts = async (
 
   const handleSearch = async () => {
   const city = searchCity.trim();
-
   if (!city) return;
 
-  // Don't request the same city again
-  if (
-    city.toLowerCase() ===
-    lastLoadedCity.toLowerCase()
-  ) {
-    return;
-  }
+  if (city.toLowerCase() === lastLoadedCity.toLowerCase()) return;
 
-    setIsLoading(true);
-    setError(null);
+  setIsLoading(true);
+  setError(null);
+  setIsOffline(false);
 
-    try {
-      const currentWeatherData = await fetchWeatherData(searchCity);
-      const forecast = await fetchForecast(currentWeatherData.coord.lat, currentWeatherData.coord.lon);
-      const weatherAlerts = await fetchWeatherAlerts(currentWeatherData.coord.lat, currentWeatherData.coord.lon);
-      applyWeatherData(currentWeatherData, forecast, weatherAlerts);
-    } catch {
+  try {
+    const currentWeatherData = await fetchWeatherData(city);
+
+    // ✅ Handle invalid city (OpenWeather returns cod=404 for not found)
+    if (currentWeatherData.cod && currentWeatherData.cod !== 200) {
+      setError("City not found. Please try again.");
+      setWeatherData(null);
+      setForecastData(null);
+      return;
+    }
+
+    const forecast = await fetchForecast(
+      currentWeatherData.coord.lat,
+      currentWeatherData.coord.lon
+    );
+    const weatherAlerts = await fetchWeatherAlerts(
+      currentWeatherData.coord.lat,
+      currentWeatherData.coord.lon
+    );
+
+    applyWeatherData(currentWeatherData, forecast, weatherAlerts);
+  } catch{
+    if (!navigator.onLine) {
+      // Only show offline if user is actually offline
       if (cachedWeather && cachedForecast) {
         setWeatherData(cachedWeather);
         setForecastData(cachedForecast);
         setIsOffline(true);
-        setError(null);
+         setError("Showing cached data.");
       } else {
-        setIsOffline(false);
-        setError("Unable to load weather data. Please check your internet connection.");
-        setWeatherData(null);
-        setForecastData(null);
+        setIsOffline(true);
+        setError("No cached data available.");
       }
-    } finally {
-      setIsLoading(false);
+    } else {
+      // ✅ Network/server error
+      setError("Unable to load weather data. Please try again later.");
+      setWeatherData(null);
+      setForecastData(null);
     }
-  };
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const getHourlyData = () => {
     if (!forecastData?.list) return [];
@@ -271,7 +296,10 @@ const fetchWeatherAlerts = async (
     return forecastData.list.slice(0, 8).map((item) => ({
       dt: item.dt,
       temp: item.main.temp,
-      weather: item.weather,
+      weather: {
+        main: item.weather[0].main,
+        icon: item.weather[0].icon,
+        description: item.weather[0].description,}
     }));
   };
 
@@ -298,7 +326,9 @@ const fetchWeatherAlerts = async (
             min: Math.round(Math.min(...temps)),
             max: Math.round(Math.max(...temps)),
           },
-          weather: dayForecasts[0].weather,
+          weather: {main:dayForecasts[0].weather[0].main,
+            icon:dayForecasts[0].weather[0].icon,
+            description:dayForecasts[0].weather[0].description} 
         };
       });
   };
@@ -500,6 +530,7 @@ const loadCurrentLocation = () => {
                 country={weatherData.sys.country}
                 temp={convertTemp(weatherData.main.temp)}
                 weather={weatherData.weather[0].main}
+                icon={weatherData.weather[0].icon}
                 unit={unit}
               />
 
@@ -552,6 +583,8 @@ const loadCurrentLocation = () => {
                 unit={unit}
                 convertTemp={convertTemp}
               />
+                 <ToastContainer position="top-right" autoClose={3000} theme={theme} />
+
 </div>
             </>
           ) : (
