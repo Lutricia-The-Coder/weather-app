@@ -31,12 +31,12 @@ export const Sidebar = ({
   return (
     <aside className="sidebar">
 
-      <h1 className="sidebarTitle">
+      <h1 className="sidebarTitle" style={{fontFamily: "fangsong"}}>
         <CloudSun size={30} strokeWidth={2} />
         <span>Weather App</span>
       </h1>
 
-      <div className="sidebarControls">
+      <div className="sidebarControls" style={{fontFamily: "-apple-system"}}>
 
         <button
           className="toggleButton"

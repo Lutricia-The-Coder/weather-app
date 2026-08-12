@@ -157,13 +157,17 @@ button:active {
 /* HourlyForecast */
 .hourlyForecast {
   margin-top: 20px;
+  
 }
 
 .forecastScroll {
-  display: flex;
+  display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+
   overflow-x: auto;
   gap: 12px;
   scrollbar-width: none;
+
 }
 
 .forecastScroll::-webkit-scrollbar {
@@ -574,16 +578,12 @@ button:active {
 
 }
 /* Light theme */
-/* ===========================
-   LIGHT THEME
-=========================== */
 
 .app.light {
   background: #E2EAF4;
   color: #1E293B;
 
 }
-
 
 /* Sidebar */
 
@@ -608,9 +608,7 @@ button:active {
 
   background: #FFFFFF;
   color: #1E293B;
-
   border: 1px solid #E2E8F0;
-
   box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
 }
 
@@ -629,7 +627,6 @@ button:active {
 .app.light .searchContainer input::placeholder {
   color: #94A3B8;
 }
-
 
 /* Buttons */
 
@@ -672,7 +669,6 @@ button:active {
 .app.light .weatherHighlights {
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-
   box-shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
 }
 
@@ -733,7 +729,7 @@ button:active {
   font-size: 1rem;
   cursor: pointer;
   transition: 0.3s;
-  min-width: 80px;      /* ensures consistent width */
+  min-width: 80px;     
   text-align: center;
 }
 
@@ -749,23 +745,20 @@ button:active {
   font-size: 1rem;
   cursor: pointer;
   transition: 0.3s;
-  min-width: 80px;      /* ensures consistent width */
-  text-align: center;
+  min-width: 80px;   
+    text-align: center;
 }
 .toggleButton,
 .unitButton {
 
 background:#1E293B;
 color:#F8FAFC;
-
 border-radius:10px;
-
 min-width:80px;
 
 }
 .toggleButton:hover,
 .unitButton:hover {
-
 background:#334155;
 
 }
@@ -780,7 +773,14 @@ background:#334155;
     gap: 12px; } 
     .highlightCard {
        padding: 16px; } }
-@media (max-width: 1024px) { .sidebar { flex: 0 0 190px; padding: 15px; } .dashboardMain { padding: 15px; gap: 15px; min-width: 0; } .highlightGrid { grid-template-columns: repeat(3, 1fr); } .highlightCard { min-height: 120px; padding: 15px; } .highlightCard strong { font-size: 24px; } .weatherArea h1 { font-size: 1.8rem; } .forecastGrid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 1024px) { 
+  sidebar { flex: 0 0 190px; padding: 15px; }
+ .dashboardMain { padding: 15px; gap: 15px; min-width: 0; }
+ .highlightGrid { grid-template-columns: repeat(3, 1fr); } 
+ .highlightCard { min-height: 120px; padding: 15px; } 
+ .highlightCard strong { font-size: 24px; }
+ .weatherArea h1 { font-size: 1.8rem; } 
+ .forecastGrid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 768px) {
    .dashboard { flex-direction: column; min-height: 100vh; } /* Sidebar becomes a top section */ .sidebar { width: 100%; flex: none; box-sizing: border-box; padding: 15px; gap: 10px; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; } .sidebar > * { flex-shrink: 0; } .dashboardMain { width: 100%; box-sizing: border-box; padding: 15px; min-width: 0; gap: 15px; overflow-x: hidden; } /* Search */ .searchContainer, .searchArea { width: 100%; box-sizing: border-box; } /* Highlights */ .highlightGrid { grid-template-columns: repeat(2, 1fr); } .weatherHighlights { 
   padding: 18px; border-radius: 18px; } /* Daily forecast */ .forecastGrid { grid-template-columns: repeat(2, 1fr); } /* Weather information */ .weatherArea h1 { font-size: 1.7rem; } .weatherArea .icon { font-size: 2.7rem; } /* Saved cities */ .savedCities { width: 100%; } /* Buttons */ .toggleButton, .unitButton { min-width: 75px; } }

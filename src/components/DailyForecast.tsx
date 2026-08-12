@@ -20,7 +20,7 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ dailyData = [], un
   };
 
   return (
-    <div className="dailyForecast">
+    <div className="dailyForecast" style={{fontFamily: "-apple-system"}}>
       <h2>5 - Day Forecast</h2>
       <div className="forecastGrid">
         {dailyData.slice(0,5).map((day) => (
@@ -39,8 +39,8 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ dailyData = [], un
                 day.weather.description
               )}</div>
             <p>Day: {convertTemp(day.temp.day)}°{unit}</p>
-            <p>Min: {convertTemp(day.temp.min)}°{unit}{"/"}
-              Max: {convertTemp(day.temp.max)}°{unit}</p>
+            <p> Min:{convertTemp(day.temp.min)}°{unit}{"/"}
+Max:{convertTemp(day.temp.max)}°{unit}</p>
           </div>
         ))}
       </div>

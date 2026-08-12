@@ -49,7 +49,7 @@ export const WeatherHighlights: React.FC<WeatherHighlightsProps> = ({
   };
 
   return (
-    <section className="weatherHighlights">
+    <section className="weatherHighlights" style={{fontFamily: "-apple-system"}}>
       <div className="sectionHeader">
         <h2>Today's Highlight</h2>
       </div>
