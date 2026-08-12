@@ -579,8 +579,9 @@ button:active {
 =========================== */
 
 .app.light {
-  background: #F1F5F9;
+  background: #E2EAF4;
   color: #1E293B;
+
 }
 
 
@@ -589,7 +590,7 @@ button:active {
 .app.light .sidebar {
   background: linear-gradient(
     180deg,
-    #E8EEF7,
+    #ffffff,
     #DDE6F2
   );
 

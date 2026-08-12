@@ -22,7 +22,7 @@ export const HourlyForecast = ({ hourlyData, unit, convertTemp }: HourlyForecast
 
   return (
     <div className="hourlyForecast">
-      <h2>8 - Hour Forecast</h2>
+      <h2>24 - Hour Forecast</h2>
       <div className="forecastScroll">
         {hourlyData.slice(0,8).map((hour) => (
           <div
