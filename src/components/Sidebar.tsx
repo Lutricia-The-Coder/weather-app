@@ -45,7 +45,7 @@ export const Sidebar = ({
         >
           {theme === "light" ? (
             <>
-              <Moon size={18} />
+              <Moon size={15} />
               <span>Dark</span>
             </>
           ) : (
@@ -72,7 +72,7 @@ export const Sidebar = ({
         onClick={() => setShowCities((prev) => !prev)}
         aria-expanded={showCities}
       >
-        <MapPin size={18} />
+        <MapPin size={13} />
         <span>Saved Cities</span>
       </button>
 
