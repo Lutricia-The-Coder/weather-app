@@ -5,7 +5,7 @@ body, html, #root {
   height: 100%;
   font-family: "Segoe UI", Roboto, sans-serif;
 }
-/*offlin alert */
+/*offline alert */
 .offlineNotice {
   padding: 12px 16px;
   margin-bottom: 15px;
@@ -24,7 +24,7 @@ body, html, #root {
 /* Dashboard layout */
 .dashboard {
  display: flex;
-  height: 100vh;          /* full viewport height */
+  height: 100vh;          
   overflow: hidden;
 }
 
@@ -47,7 +47,6 @@ body, html, #root {
   overflow-y: auto;
 }
 
-/* Shared card style */
 .card {
   border-radius: 12px;
   padding: 20px;
@@ -157,13 +156,12 @@ button:active {
 /* HourlyForecast */
 .hourlyForecast {
   margin-top: 20px;
-  
+
 }
 
 .forecastScroll {
   display:grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-
   overflow-x: auto;
   gap: 12px;
   scrollbar-width: none;
@@ -202,14 +200,11 @@ button:active {
 .loading {
   text-align: center;
 }
-
 .loading-icon {
   font-size: 2.5rem;
   animation: spin 1s linear infinite;
 }
 /*weatherhighlight */
- 
-
 .weatherHighlights {
   margin-top: 2rem;
   background: white;
@@ -227,47 +222,30 @@ button:active {
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   margin-bottom: 20px;
 }
-
 .sectionHeader h2 {
   font-size: 20px;
   font-weight: 600;
 }
 
-
-/* GRID */
-
 .highlightGrid {
   display: grid;
-
   grid-template-columns:
     repeat(4, 1fr);
-
   gap: 15px;
 }
 
-
-/* CARD */
-
+/* card*/
 .highlightCard {
   min-height: 130px;
-
   padding: 18px;
-
   border-radius: 18px;
-
   background: #f8fafc;
-
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
-
   gap: 8px;
-
   transition: transform 0.2s ease;
 }
 
@@ -278,19 +256,13 @@ button:active {
 .dark .highlightCard {
   background: #374151;
 }
-
-
-/* TITLE */
+/* title */
 
 .highlightTitle {
   display: flex;
-
   align-items: center;
-
   gap: 8px;
-
   font-size: 14px;
-
   color: #64748b;
 }
 
@@ -298,18 +270,13 @@ button:active {
   color: #cbd5e1;
 }
 
-
-/* VALUE */
-
 .highlightCard strong {
   font-size: 26px;
-
   font-weight: 600;
 }
 
 .highlightCard small {
   font-size: 12px;
-
   color: #64748b;
 }
 
@@ -421,80 +388,56 @@ button:active {
   background: #e6ad25;
 }
 
-
 /* Dark theme */
-/* ===========================
-   DARK THEME - Dashboard Style
-=========================== */
-
 .app.dark {
   background: #0B1220;
   color: #F8FAFC;
 }
 
-
 /* Sidebar */
-
 .app.dark .sidebar {
   background: linear-gradient(
     180deg,
     #111827,
     #0F172A
   );
-
   border-right: 1px solid rgba(255,255,255,0.08);
 }
 
-
 /* Main cards */
-
 .app.dark .card,
 .app.dark .searchContainer,
 .app.dark .forecastHour,
 .app.dark .forecastDay,
 .app.dark .alertCard {
-
   background: #162033;
   color: #F8FAFC;
-
   border: 1px solid rgba(255,255,255,0.05);
 }
 
-
 /* Search bar */
-
 .app.dark .searchContainer {
-
   background: #162033;
-
 }
 
 .app.dark .searchContainer input {
-
   background: transparent;
   color: white;
 
 }
-
 .app.dark .searchContainer input::placeholder {
-
   color: #94A3B8;
-
 }
-
 
 /* Buttons */
 
 .app.dark button {
-
   background: #1E293B;
   color: #F8FAFC;
-
 }
 
 
 .app.dark button:hover {
-
   background: #334155;
 
 }
@@ -503,64 +446,48 @@ button:active {
 /* Active tabs */
 
 .app.dark .forecastTabs button.active {
-
   background: #7C3AED;
   color: white;
 
 }
-
 
 /* Weather highlights container */
 
 .app.dark .weatherHighlights {
-
   background: #162033;
-
 }
-
 
 /* Highlight cards */
 
 .app.dark .highlightCard {
-
   background: #1E293B;
 
 }
 
-
 .app.dark .highlightTitle {
-
   color: #94A3B8;
 
 }
-
 
 .app.dark .highlightCard small {
-
-  color: #94A3B8;
+color: #94A3B8;
 
 }
-
 
 /* Location button */
 
 .app.dark .locationButton {
-
   background: #7C3AED;
   color: white;
 
 }
 
-
 .app.dark .locationButton:hover {
-
   background: #6D28D9;
 
 }
 
-
 /* Offline warning */
-
 .app.dark .offlineNotice {
 
   background: #422006;
@@ -569,20 +496,15 @@ button:active {
 
 }
 
-
 /* Loading */
-
 .app.dark .loading-icon {
-
   color: #A78BFA;
-
 }
 /* Light theme */
 
 .app.light {
   background: #E2EAF4;
   color: #1E293B;
-
 }
 
 /* Sidebar */
@@ -593,10 +515,8 @@ button:active {
     #ffffff,
     #DDE6F2
   );
-
   border-right: 1px solid #E2E8F0;
 }
-
 
 /* Cards */
 
@@ -611,7 +531,6 @@ button:active {
   border: 1px solid #E2E8F0;
   box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
 }
-
 
 /* Search */
 
@@ -655,14 +574,12 @@ button:active {
 .app.light .forecastTabs button.active {
   background: #7C3AED;
   color: #FFFFFF;
-
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.2);
 }
 
 .app.light .forecastTabs button.active:hover {
   background: #6D28D9;
 }
-
 
 /* Weather Highlights */
 
@@ -699,6 +616,7 @@ button:active {
 .app.light .locationButton:hover {
   background: #6D28D9;
 }
+
 /*yoast*/
 .Toastify__toast--success {
   --toastify-color-success: #7C3AED;
@@ -710,14 +628,9 @@ button:active {
 
 
 /* Loading */
-
 .app.light .loading-icon {
   color: #7C3AED;
 }
-
-
-/* Alerts */
-
 .app.light .alertCard {
   border-left-color: #7C3AED;
 }
@@ -725,7 +638,7 @@ button:active {
   background: #2C2C3A;
   color: #fff;
   border: none;
-  border-radius: 8px;/* same size for both */
+  border-radius: 8px;
   font-size: 1rem;
   cursor: pointer;
   transition: 0.3s;
@@ -738,41 +651,35 @@ button:active {
   color: #fff;
   border: none;
   border-radius: 8px;
-  margin: 0 20px;
-  height: 37px;
-
-     /* same size for both */
+  margin: 0 40px;
+  height: 39px;
   font-size: 1rem;
   cursor: pointer;
   transition: 0.3s;
   min-width: 80px;   
-    text-align: center;
+  text-align: center;
 }
+
 .toggleButton,
 .unitButton {
-
 background:#1E293B;
 color:#F8FAFC;
 border-radius:10px;
 min-width:80px;
-
 }
+
 .toggleButton:hover,
 .unitButton:hover {
 background:#334155;
-
 }
 
 
 @media (max-width: 1200px) {
    .sidebar { flex: 0 0 210px; padding: 18px; }
-   .dashboardMain {
-  padding: 18px; gap: 18px; min-width: 0; }
-   .highlightGrid {
-   grid-template-columns: repeat(4, 1fr);
+   .dashboardMain { padding: 18px; gap: 18px; min-width: 0; }
+   .highlightGrid {grid-template-columns: repeat(4, 1fr);
     gap: 12px; } 
-    .highlightCard {
-       padding: 16px; } }
+    .highlightCard { padding: 16px; } }
 @media (max-width: 1024px) { 
   sidebar { flex: 0 0 190px; padding: 15px; }
  .dashboardMain { padding: 15px; gap: 15px; min-width: 0; }
@@ -782,26 +689,50 @@ background:#334155;
  .weatherArea h1 { font-size: 1.8rem; } 
  .forecastGrid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 768px) {
-   .dashboard { flex-direction: column; min-height: 100vh; } /* Sidebar becomes a top section */ .sidebar { width: 100%; flex: none; box-sizing: border-box; padding: 15px; gap: 10px; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; } .sidebar > * { flex-shrink: 0; } .dashboardMain { width: 100%; box-sizing: border-box; padding: 15px; min-width: 0; gap: 15px; overflow-x: hidden; } /* Search */ .searchContainer, .searchArea { width: 100%; box-sizing: border-box; } /* Highlights */ .highlightGrid { grid-template-columns: repeat(2, 1fr); } .weatherHighlights { 
-  padding: 18px; border-radius: 18px; } /* Daily forecast */ .forecastGrid { grid-template-columns: repeat(2, 1fr); } /* Weather information */ .weatherArea h1 { font-size: 1.7rem; } .weatherArea .icon { font-size: 2.7rem; } /* Saved cities */ .savedCities { width: 100%; } /* Buttons */ .toggleButton, .unitButton { min-width: 75px; } }
+   .dashboard { flex-direction: column; min-height: 100vh; } 
+   .sidebar { width: 100%; flex: none; box-sizing: border-box; padding: 15px; gap: 10px; flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: center; } 
+   .sidebar > * { flex-shrink: 0; } 
+   .dashboardMain { width: 100%; box-sizing: border-box; padding: 15px; min-width: 0; gap: 15px; overflow-x: hidden; } /* Search */ .searchContainer, .searchArea { width: 100%; box-sizing: border-box; } /* Highlights */ .highlightGrid { grid-template-columns: repeat(2, 1fr); } .weatherHighlights { 
+  padding: 18px; border-radius: 18px; } 
+  .forecastGrid { grid-template-columns: repeat(2, 1fr); }  
+  .weatherArea h1 { font-size: 1.7rem; } 
+  .weatherArea .icon { font-size: 2.7rem; } 
+  .savedCities { width: 100%; }  
+  .toggleButton, .unitButton { min-width: 75px; } }
 @media (max-width: 480px) { 
-  .dashboard { display: flex; flex-direction: column; } .sidebar { padding: 12px; gap: 8px; } .dashboardMain { padding: 12px; gap: 12px; } /* Search becomes vertical */ .searchContainer { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; } .searchArea { flex-direction: column; align-items: stretch; gap: 8px; } .searchContainer input { width: 100%; min-width: 0; box-sizing: border-box; }
-   .locationButton { width: 100%; } /* Highlights */ .weatherHighlights { padding: 15px; border-radius: 16px; } .highlightGrid { grid-template-columns: 1fr; gap: 10px; } .highlightCard { min-height: 105px; padding: 15px; } .highlightCard strong { font-size: 23px; } /* Forecast */ .forecastGrid { grid-template-columns: 1fr 1fr; gap: 10px; } .forecastDay { padding: 10px; } .forecastHour { flex: 0 0 85px; padding: 8px; } /* Weather information */ .weatherArea h1 { font-size: 1.6rem; } .weatherArea span { font-size: 0.9rem; } .weatherArea .icon { font-size: 2.5rem; } .weatherArea h2 { font-size: 1rem; } /* Forecast tabs */ .forecastTabs { flex-wrap: wrap; } .forecastTabs button { flex: 1; min-width: 120px; } /* Offline notice */ .offlineNotice { font-size: 0.85rem; padding: 10px 12px; } /* Alerts */ .alertCard { padding: 10px; } .alertCard p { font-size: 0.9rem; line-height: 1.4; } }
+  .dashboard { display: flex; flex-direction: column; } 
+  .sidebar { padding: 12px; gap: 8px; } 
+  .dashboardMain { padding: 12px; gap: 12px; }
+ .searchContainer { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; } .searchArea { flex-direction: column; align-items: stretch; gap: 8px; } .searchContainer input { width: 100%; min-width: 0; box-sizing: border-box; }
+   .locationButton { width: 100%; } 
+   .weatherHighlights { padding: 15px; border-radius: 16px; } 
+   .highlightGrid { grid-template-columns: 1fr; gap: 10px; }
+   .highlightCard { min-height: 105px; padding: 15px; }
+   .highlightCard strong { font-size: 23px; } 
+   .forecastGrid { grid-template-columns: 1fr 1fr; gap: 10px; }
+   .forecastDay { padding: 10px; } 
+   .forecastHour { flex: 0 0 85px; padding: 8px; }  
+   .weatherArea h1 { font-size: 1.6rem; } 
+   .weatherArea span { font-size: 0.9rem; } 
+   .weatherArea .icon { font-size: 2.5rem; } 
+   .weatherArea h2 { font-size: 1rem; }
+   .forecastTabs { flex-wrap: wrap; } 
+   .forecastTabs button { flex: 1; min-width: 120px; }  
+   .offlineNotice { font-size: 0.85rem; padding: 10px 12px; }
+   .alertCard { padding: 10px; } 
+   .alertCard p { font-size: 0.9rem; line-height: 1.4; } }
 @media (max-width: 320px) {
-   .sidebar { padding: 10px; gap: 6px; } 
-   .dashboardMain { padding: 10px; gap: 10px; }
-    .weatherArea h1 { font-size: 1.4rem; } 
-    .weatherArea h2 { font-size: 0.95rem; } 
-    .weatherArea .icon { font-size: 2.2rem; } 
-    .weatherHighlights { padding: 12px; } 
-    .sectionHeader h2 { font-size: 17px; }
-     .highlightCard { min-height: 95px; 
-      padding: 12px; }
-       .highlightTitle { font-size: 13px; }
-        .highlightCard strong { font-size: 21px; } 
-        .forecastGrid { grid-template-columns: 1fr; }
-         .forecastHour { flex: 0 0 75px; 
-          font-size: 0.85rem; } .toggleButton,
-           .unitButton { min-width: 65px; 
-            font-size: 0.85rem; padding: 7px 8px; } 
-        .offlineNotice { font-size: 0.8rem; } }
+.sidebar { padding: 10px; gap: 6px; } 
+.dashboardMain { padding: 10px; gap: 10px; }
+.weatherArea h1 { font-size: 1.4rem; }  
+.weatherArea h2 { font-size: 0.95rem; } 
+.weatherArea .icon { font-size: 2.2rem; } 
+.weatherHighlights { padding: 12px; } 
+.sectionHeader h2 { font-size: 17px; }
+.highlightCard { min-height: 95px; padding: 12px; }
+.highlightTitle { font-size: 13px; }
+.highlightCard strong { font-size: 21px; } 
+.forecastGrid { grid-template-columns: 1fr; }
+.forecastHour { flex: 0 0 75px; font-size: 0.85rem; }
+.toggleButton,.unitButton { min-width: 65px; font-size: 0.85rem; padding: 7px 8px; } 
+.offlineNotice { font-size: 0.8rem; } }
