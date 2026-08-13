@@ -561,12 +561,14 @@ const loadCurrentLocation = () => {
       hourlyData={getHourlyData()}
       unit={unit}
       convertTemp={convertTemp}
+      timezone={weatherData?.timezone}
     />
   ) : (
     <DailyForecast
       dailyData={getDailyData()}
       unit={unit}
       convertTemp={convertTemp}
+      timezone={weatherData?.timezone}
     />
   )}
   

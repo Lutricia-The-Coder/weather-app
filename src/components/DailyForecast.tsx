@@ -12,11 +12,22 @@ interface DailyForecastProps {
   }[];
   unit: "C" | "F";
   convertTemp: (temp: number) => number;
+  timezone?: number;
 }
 
-export const DailyForecast: React.FC<DailyForecastProps> = ({ dailyData = [], unit , convertTemp }) => {
+export const DailyForecast: React.FC<DailyForecastProps> = ({ dailyData = [], unit , convertTemp, timezone = 0 }) => {
   const formatDay = (timestamp: number) => {
-    return new Date(timestamp * 1000).toLocaleDateString([], { weekday: "short" });
+    const utcDate = new Date(timestamp * 1000);
+    const offsetHours = timezone / 3600;
+    
+    let hours = utcDate.getUTCHours() + offsetHours;
+    const dayOffset = Math.floor(hours / 24);
+    
+    const localDate = new Date(utcDate.getTime() + timezone * 1000);
+    localDate.setUTCDate(localDate.getUTCDate() + dayOffset);
+    
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    return days[localDate.getUTCDay()];
   };
 
   return (
