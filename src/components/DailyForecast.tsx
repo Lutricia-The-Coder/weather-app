@@ -39,8 +39,8 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ dailyData = [], un
                 day.weather.description
               )}</div>
             <p>Day: {convertTemp(day.temp.day)}°{unit}</p>
-            <p> Min:{convertTemp(day.temp.min)}°{unit}{"/"}
-Max:{convertTemp(day.temp.max)}°{unit}</p>
+            <p> L:{convertTemp(day.temp.min)}°{unit}{"  "}
+H:{convertTemp(day.temp.max)}°{unit}</p>
           </div>
         ))}
       </div>
