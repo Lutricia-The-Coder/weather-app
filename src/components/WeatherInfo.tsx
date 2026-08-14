@@ -11,7 +11,7 @@ interface WeatherInfoProps {
 }
 
 export const WeatherInfo: React.FC<WeatherInfoProps> = ({ name, country, temp, weather,icon, unit }) => (
-  <div className="weatherArea" style={{fontFamily: "inherit"}}>
+  <div className="weatherArea" style={{fontFamily: "serif"}}>
     <h1>{name}</h1>
     <span>{country}</span>
     <div className="icon">{iconChanger(icon,weather)}</div>
