@@ -36,7 +36,7 @@ export const Sidebar = ({
         <span>Weather App</span>
       </h1>
 
-      <div className="sidebarControls" style={{fontFamily: "-apple-system"}}>
+      <div className="sidebarControls" style={{fontFamily: "inherit"}}>
 
         <button
           className="toggleButton"

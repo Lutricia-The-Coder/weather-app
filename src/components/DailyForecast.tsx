@@ -31,7 +31,7 @@ export const DailyForecast: React.FC<DailyForecastProps> = ({ dailyData = [], un
   };
 
   return (
-    <div className="dailyForecast" style={{fontFamily: "-apple-system"}}>
+    <div className="dailyForecast" style={{fontFamily: "inherit"}}>
       <h2>5 - Day Forecast</h2>
       <div className="forecastGrid">
         {dailyData.slice(0,5).map((day) => (

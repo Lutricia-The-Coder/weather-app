@@ -32,7 +32,7 @@ export const HourlyForecast = ({ hourlyData, unit, convertTemp, timezone = 0 }: 
   };
 
   return (
-    <div className="hourlyForecast" style={{fontFamily: "-apple-system"}}>
+    <div className="hourlyForecast" style={{fontFamily: "inherit"}}>
       <h2>24 - Hour Forecast</h2>
       <div className="forecastScroll">
         {hourlyData.slice(0,8).map((hour) => (
