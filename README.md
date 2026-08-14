@@ -194,12 +194,6 @@ The application uses the browser's Geolocation API when available.
 
 When location access is available, the application attempts to load weather using the user's coordinates.
 
-If location access is unavailable or fails, the application falls back to:
-
-```text
-Polokwane
-```
-
 Users can also manually search for another city.
 
 ##  Forecasts
