@@ -10,7 +10,14 @@ The application allows users to search for cities, view current weather conditio
 
 ![Dark Mode](src/assets/darkMode.png)
 
-![Light Mode](src/assets/LightMode.png)
+![Light Mode](src/assets/lightMode.png)
+
+---
+
+### Links
+
+* **Solution URL:** `https://github.com/Lutricia-The-Coder/weather-app.git`
+* **Live Site URL:** `https://weather-app-git-main-lutricia-s-projects.vercel.app/`
 
 ---
 ## Features
