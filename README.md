@@ -4,7 +4,16 @@ A responsive weather dashboard built with **React, TypeScript, Vite, and OpenWea
 
 The application allows users to search for cities, view current weather conditions, check hourly and daily forecasts, save favourite cities, switch between light and dark themes, change temperature units, and use their current location to load local weather.
 
-##  Features
+---
+
+## Preview
+
+![Dark Mode](src/assets/darkMode.png)
+
+![Light Mode](src/assets/LightMode.png)
+
+---
+## Features
 
 *  Search weather by city
 *  Get weather using the user's current location
@@ -350,6 +359,36 @@ The project currently includes the main weather dashboard functionality, respons
 
 Weather alert functionality depends on the availability and authorization of the relevant OpenWeatherMap alert service for the API account.
 
+---
+
+## Future Improvements
+
+* More detailed severe weather alerts
+* Improved weather alert information
+* More advanced weather visualizations
+* Weather radar integration
+* Additional forecast information
+* Better accessibility support
+* Unit and integration testing
+* Progressive Web App (PWA) support
+* More advanced offline capabilities
+* Improved API error handling
+* More advanced location management
+* Weather data synchronization
+* Performance optimizations
+
+---
+
+# Useful Resources
+
+* React Documentation – https://react.dev
+* TypeScript Handbook – https://www.typescriptlang.org/docs/
+* Vite Documentation – https://vite.dev
+* Reacticons – https://reacticons.com
+* MDN Web Docs – https://developer.mozilla.org
+* OpenWeather Documentation – https://openweathermap.org/api
+
+---
 ##  Author
 
 **Lutricia-The-Coder**
@@ -357,5 +396,15 @@ Weather alert functionality depends on the availability and authorization of the
 GitHub:
 
 https://github.com/Lutricia-The-Coder
+
+---
+
+# Acknowledgments
+
+Special thanks to **Mentors and Facilitators** for providing practical front-end development challenges that encourage developers to strengthen their React, TypeScript, API integration, responsive design, and UI development skills.
+
+This project provided an opportunity to apply these concepts to a practical weather application while exploring browser APIs such as **Geolocation**, **Notifications**, and **localStorage**.
+
+The project also helped strengthen my understanding of asynchronous API requests, reusable React components, custom hooks, state management, offline caching, responsive design, and user-focused application development.
 
 
