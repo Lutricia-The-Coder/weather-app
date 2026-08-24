@@ -7,9 +7,10 @@ The application allows users to search for cities, view current weather conditio
 ---
 
 ## Preview
-
+ ## Dark Mode
 ![Dark Mode](src/assets/darkMode.png)
 
+## Light Mode
 ![Light Mode](src/assets/lightMode.png)
 
 ---
