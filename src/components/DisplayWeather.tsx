@@ -249,7 +249,7 @@ const fetchWeatherAlerts = async (
   try {
     const currentWeatherData = await fetchWeatherData(city);
 
-    // ✅ Handle invalid city (OpenWeather returns cod=404 for not found)
+    //  Handle invalid city (OpenWeather returns cod=404 for not found)
     if (currentWeatherData.cod && currentWeatherData.cod !== 200) {
       setError("City not found. Please try again.");
       setWeatherData(null);
@@ -280,7 +280,7 @@ const fetchWeatherAlerts = async (
         setError("No cached data available.");
       }
     } else {
-      // ✅ Network/server error
+      //  Network/server error
       setError("Unable to load weather data. Please try again later.");
       setWeatherData(null);
       setForecastData(null);

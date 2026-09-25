@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  CloudSun,
-  Moon,
-  Sun,
-  MapPin,
-  X,
-} from "lucide-react";
+import { CloudSun, Moon, Sun, MapPin, X} from "lucide-react";
 
 interface SidebarProps {
   savedCities: string[];

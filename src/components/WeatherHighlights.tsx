@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Thermometer,
-  Droplets,
-  Gauge,
-  Wind,
-  CloudRain,
-  Eye,
+import { Thermometer,Droplets, Gauge, Wind, CloudRain, Eye,
   Sunrise as SunriseIcon,
   Sunset as SunsetIcon,
 } from "lucide-react";
