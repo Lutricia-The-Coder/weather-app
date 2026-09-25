@@ -11,7 +11,7 @@ export const useNotification = (alerts: any[]) => {
       if (Notification.permission === "granted" && alerts.length > 0) {
         // Show only the first alert to avoid spamming
         const alert = alerts[0];
-        new Notification(`⚠️ ${alert.event}`, {
+        new Notification(` ${alert.event}`, {
           body: alert.description,
         });
       }
